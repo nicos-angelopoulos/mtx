@@ -1,0 +1,20 @@
+---   Releases   ---
+--------------------
+
+
+0.1         @   18.04.02     (first public release)
+     18.03.23   PERF:  mem efficient version of mtx_rows_partition/3 when io directs to files
+     18.03.07   OPTS:  added space to sep/1 of mtx/3
+                DOC:   formatting of mtx_sep/2
+     18.03.06   IFACE: [] matrix is canonical empty matrix by_row (mtx_type/2).
+     18.02.16   IFACE: mtx_value_column_frequencies/3 curved out of mtx_value_plot/3
+     18.02.03   IFACE: mtx_read_table/4.
+                ADDED: data alias for all data subdirs in packs and local dir data
+                OPTS:  header + excludes in mtx_column_include_rows/4,5
+                RMV:   mtx_subset/4,5
+     17.12.12   ADDED: mtx/2's 1st arg now also passes absolute_file_name/3
+                ADDED: mtx/2 option match/1 -> csv's match_arity/1
+                FIXED: mtx_sep/2 only succeeds once now
+     17.06.27   ADDED: tab and comma as recognised separators
+     17.03.22   ADDED: sep(SepCode) option in mtx/2
+     16.06.29   ADDED: this document
