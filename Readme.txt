@@ -1,7 +1,7 @@
 mtx: Working with data matrices
 
-This is an SWI-Prolog pack for working with data matrices, taking off from where library(csv) ends.
-The library will hopefully grow to become useful tool for logic programming based data science.
+This is an SWI-Prolog pack for working with data matrices, taking off from where library(csv) ends.<br>
+The library will hopefully grow to become auseful tool for logic programming based data science.
 
 Install via SWI's package manager:
 ==
