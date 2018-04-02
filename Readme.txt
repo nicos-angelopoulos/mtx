@@ -5,7 +5,7 @@ The library will hopefully grow to become useful tool for logic programming base
 
 Install via SWI's package manager:
 ==
-?- pack_install(mtx).  % it will pack(lib) if not present in your system
+?- pack_install(mtx).  % it will install pack(lib) if not present in your system
 ?- use_module(library(lib)).
 ?- lib(mtx).
 ?- mtx(data(mtcars),MtCars).
