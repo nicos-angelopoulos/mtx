@@ -301,6 +301,5 @@ Date = date(2018, 4, 2).
 
 @version 0.1
 @license MIT
-
 */
 mtx_version( 0:1:0, date(2018,4,2) ).
