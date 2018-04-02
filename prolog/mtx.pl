@@ -138,6 +138,7 @@ In theory the library supports polymorphic representations of matrices, but in i
 current form is best to assume that the canonical form (see mtx/1) is the only one supported. <br>
 The library should be considered as still in developmental flux.
 
+License: MIT.
 
 ---+ Input/Output:
 At the very least library(mtx) can be viewed as an addition/enhancement io of matrices to files via mtx/2.<br>
@@ -286,10 +287,13 @@ mtx_sep_known( space, 0'   ).
 
 Current version and release date for pack =mtx=.
 
+The pack is distributed under the MIT license.
+
 ==
 ?- mtx_version( Ver, Date ).
 Ver = 0:1:0,
 Date = date(2018, 4, 2).
 ==
+
 */
 mtx_version( 0:1:0, date(2018,4,2) ).

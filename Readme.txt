@@ -77,6 +77,7 @@ doc: http://stoics.org.uk/~nicos/sware/mtx/doc/html/mtx.html
 source: http://stoics.org.uk/~nicos/sware/packs/mtx/
 github: https://github.com/nicos-angelopoulos/mtx
 
+licence: MIT
 ---
 
 Nicos Angelopoulos
