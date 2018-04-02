@@ -216,12 +216,16 @@ If a predicate definition has both Cnm and Cps define them in that order.
   * apply_on(AppOn=whole)
      for predicate calling on columns or rows, which part to use: *whole*, _head_ or _body_
 
-See documentation for the individual predicates. 
-Good starting points are the documentation for mtx/1 and mtx/3.
+Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 
 @author nicos angelopoulos
-@version  0.1 2018/2/3    first public version
+@version  0.1 2018/4/2    first public version
 @tbd add more debug(mtx(Pred)) messages (see src/mtx.pl for a start on this)
+@see web-page: http://stoics.org.uk/~nicos/sware/mtx
+@see doc: http://stoics.org.uk/~nicos/sware/mtx/doc/html/mtx.html
+@see source: http://stoics.org.uk/~nicos/sware/packs/mtx/
+@see github: https://github.com/nicos-angelopoulos/mtx
+@license MIT
 
 */
 
