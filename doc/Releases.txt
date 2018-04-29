@@ -1,6 +1,8 @@
 ---   Releases   ---
 --------------------
 
+0.2
+     18.04.30   FIXED:  loading of mtx library in example examples/ones_plots.pl
 
 0.1         @   18.04.02     (first public release)
      18.03.23   PERF:  mem efficient version of mtx_rows_partition/3 when io directs to files
