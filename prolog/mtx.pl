@@ -32,6 +32,7 @@
 				mtx_columns_values/3,
                 mtx_value_plot/3,
                 mtx_value_column_frequencies/3,
+                mtx_columns_collapse/6,                                       % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
                 mtx_columns_cross_table/5,
 
                 mtx_read_table/4,    % +CsvF, +RowsName, -Table, +Opts
@@ -126,6 +127,7 @@
 :- lib(mtx_apply/4).
 :- lib(mtx_type/2).
 :- lib(mtx_read_table/4).
+:- lib(mtx_columns_collapse/6).
 
 :- lib(end(mtx)).
 
