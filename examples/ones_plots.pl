@@ -1,3 +1,6 @@
+
+:- use_module( library(mtx) ).
+
 /** ones_plots.
 
 Plots the frequencies of ones in the data(binary.csv) dataset in two plots.
