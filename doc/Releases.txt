@@ -1,14 +1,14 @@
 ---   Releases   ---
 --------------------
 
-<<<<<<< HEAD
+1.2 
+     18.05.11   DOC:    mtx_rows_partition/5, added explanations to option apply_on
 1.1
      18.04.27   IFACE:  mtx_columns_collapse/6 added
-=======
+
 0.2
      18.04.30   FIXED:  loading of mtx library in example examples/ones_plots.pl
 
->>>>>>> f414cf68d08192e4e25a8e8b2dd04ceb7c3c24e1
 0.1         @   18.04.02     (first public release)
      18.03.23   PERF:  mem efficient version of mtx_rows_partition/3 when io directs to files
      18.03.07   OPTS:  added space to sep/1 of mtx/3

@@ -17,7 +17,7 @@ Opts
     If true, first line is removed before partitioning and added to both Incl and Excl
 
   * apply_on(AppOn=whole)
-    which part of row to use: *whole*, _head_ or _body_
+    which part of row to use: *whole*, _head_ (first argument of row term) or _body_ (the list of arguments of the row term)
 
 ==
 ?- assert( (arg_val(N,Val,Row) :- arg(N,Row,Val)) ).
