@@ -27,6 +27,7 @@
 				mtx_columns_copy/4,
 				mtx_columns_partition/4,
 				mtx_columns_partition/5,
+				mtx_row_apply/4,
 				mtx_rows_partition/5,
 				mtx_columns_remove/3,
 				mtx_columns_values/3,
@@ -44,6 +45,7 @@
 				mtx_prolog/3,
 				mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
+                mtx_bi_opts/5,
                 mtx_version/2
 			  ]
 		).
@@ -128,6 +130,8 @@
 :- lib(mtx_type/2).
 :- lib(mtx_read_table/4).
 :- lib(mtx_columns_collapse/6).
+:- lib(mtx_row_apply/4).
+:- lib(mtx_bi_opts/5).
 
 :- lib(end(mtx)).
 

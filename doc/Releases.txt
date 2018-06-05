@@ -1,12 +1,11 @@
 ---   Releases   ---
 --------------------
 
-1.2 
+0.2 
+     18.06.05   IFACE:  mtx_bi_opts/5 a common way for options for predicates that have input and output MTXs
+                IFACE:  mtx_row_apply/4, vanilla and from-file-direct-to-file modes
      18.05.11   DOC:    mtx_rows_partition/5, added explanations to option apply_on
-1.1
      18.04.27   IFACE:  mtx_columns_collapse/6 added
-
-0.2
      18.04.30   FIXED:  loading of mtx library in example examples/ones_plots.pl
 
 0.1         @   18.04.02     (first public release)
