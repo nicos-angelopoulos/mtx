@@ -305,8 +305,14 @@ Ver = 0:1:0,
 Date = date(2018, 4, 2).
 ==
 
-@version 0.1
+Previously: 
+==
+Ver = 0:1:0, Date = date(2018, 4, 2).
+==
+
+@version 0.2
 @license MIT
 
 */
-mtx_version( 0:1:0, date(2018,4,2) ).
+% mtx_version( 0:1:0, date(2018,4,2) ).
+mtx_version( 0:2:0, date(2018,6,5) ).

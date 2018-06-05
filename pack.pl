@@ -1,5 +1,5 @@
 name(mtx).
-version('0.1').
+version('0.2').
 title('Working with data matrices').
 keywords([matrices,csv,data,analysis]).
 author( 'Nicos Angelopoulos', 'http://stoics.org.uk/~nicos' ).

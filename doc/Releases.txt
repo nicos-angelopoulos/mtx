@@ -1,7 +1,7 @@
 ---   Releases   ---
 --------------------
 
-0.2 
+0.2         @   18.06.05
      18.06.05   IFACE:  mtx_bi_opts/5 a common way for options for predicates that have input and output MTXs
                 IFACE:  mtx_row_apply/4, vanilla and from-file-direct-to-file modes
      18.05.11   DOC:    mtx_rows_partition/5, added explanations to option apply_on
