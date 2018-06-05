@@ -103,12 +103,6 @@ mtx_bi_opts( InOpts, Opts ) :-
 mtx_row_apply_streams( end_of_file, _Goal, _InStream, _InCompOpts, _OutStream, _OutCompOpts ) :- !.
 mtx_row_apply_streams( Row, Goal, InStream, InCompOpts, OutStream, OutCompOpts ) :-
     call( Goal, Row, New ),
-    csv_write_row( OutStream, New, OutCompOpts ),
+    csv:csv_write_row( OutStream, OutCompOpts, New ),  % fixeme: should be in interface of library(csv)
     csv_read_row( InStream, Next, InCompOpts ),
     mtx_row_apply_streams( Next, Goal, InStream, InCompOpts, OutStream, OutCompOpts ).
-
-% fixme: this should be in SWI's csv.pl
-% 
-csv_write_row( Stream, Row, CompOpts ) :-
-    phrase(csv:emit_csv([Row], CompOpts), String),
-    format(Stream, '~s', [String]).

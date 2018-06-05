@@ -1,6 +1,10 @@
 ---   Releases   ---
 --------------------
 
+0.3
+
+     18.06.05   UPDATE: use newly introduced csv:csv_write_row/3 instead of locally defined version.
+
 0.2         @   18.06.05
      18.06.05   IFACE:  mtx_bi_opts/5 a common way for options for predicates that have input and output MTXs
                 IFACE:  mtx_row_apply/4, vanilla and from-file-direct-to-file modes
