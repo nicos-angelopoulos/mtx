@@ -17,7 +17,7 @@ Opts
     If true, first line is removed before partitioning and added to both Incl and Excl
 
   * apply_on(AppOn=whole)
-    which part of row to use: *whole*, _head_ (first argument of row term) or _body_ (the list of arguments of the row term)
+    which part of row to use: *whole*, _head_ (first argument of row term) or _body_ (the list of arguments of the row term)\br
 
 ==
 ?- assert( (arg_val(N,Val,Row) :- arg(N,Row,Val)) ).
@@ -35,6 +35,7 @@ xLen:31
 @version 0.1 2016/2/16
 @version 0.2 2018/3/23,   added optmised version for when all io is on files
 @see     mtx_header_body/5  (has_header(HasH))
+@tbd if AppOn is of the form arg(Arg) then Arg is taken to be a column name or 
 
 */
 mtx_rows_partition( MtxIn, Goal, Incl, Excl, Args ) :-
