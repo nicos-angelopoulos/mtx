@@ -3,6 +3,7 @@
 
 0.3
 
+     18.10.05   UPDATE: change throw error from either_of to in_one_of()
      18.06.05   UPDATE: use newly introduced csv:csv_write_row/3 instead of locally defined version.
 
 0.2         @   18.06.05

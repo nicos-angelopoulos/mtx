@@ -214,7 +214,7 @@ mtx_ground_ness( true/_, Mtx, Canon, Opts ) :- !,
 mtx_ground_ness( _/true, Mtx, Canon, _Opts ) :- !,  % passes results back to variable instead of writing
 	Mtx = Canon.
 mtx_ground_ness( _Else, Mtx, Canon, _Opts ) :- !,
-	throw( pack_error(mtx,arg_ground_at_either(1,2,Mtx,Canon)) ).
+	throw( arg_ground_in_one_of([1,2],[Mtx,Canon]), mtx:mtx/2 ).
 
 mtx_type_canonical( by_column, Mtx, Canon, _Opts ) :-
 	mtx_lists( Canon, Mtx ).
