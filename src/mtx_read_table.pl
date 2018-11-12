@@ -1,6 +1,7 @@
 
-:- ensure_loaded( library(csv) ).
-% :- lib( stoics_lib:en_list/2 ).
+:- ensure_loaded(library(csv)).
+% :- lib(stoics_lib:en_list/2).
+:- lib(mtx_options_csv/4). 
 
 /** mtx_read_table( +CsvF, +RowsName, -Table, +OptS ).
 
@@ -33,15 +34,7 @@ Tbl = [row(samples, c_a, c_b), row(1, a, b), row(2, aa, bb)].
 */
 mtx_read_table( File, RowsName, Table, OptionS ) :-
     en_list( OptionS, Options ),
-    ( select_option(sep(MtxSep),Options,Options0) ->
-                        mtx_sep( MtxSep, CsvSep ),
-                        Options1 = [separator(CsvSep)|Options0]
-                  ;     
-                        csv:default_separator( File, Options, Options1 )
-    ),
-    select_option( match(MatchPrv), Options1, Options2, _ ),
-    ( var(MatchPrv) -> Match = true; Match = MatchPrv ),
-    csv:make_csv_options([match_arity(Match)|Options2], RecOptionsPrv, Options3),
+    mtx_options_csv( Options, File, RecOptionsPrv, Options3 ),
     setup_call_cleanup(
         open(File, read, Stream, Options3),
         ( 

@@ -23,7 +23,6 @@
                 mtx_column_frequency_threshold/5,
 				mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
 				mtx_column_values_select/6,
-
 				mtx_columns_copy/4,
 				mtx_columns_partition/4,
 				mtx_columns_partition/5,
@@ -33,11 +32,11 @@
 				mtx_columns_values/3,
                 mtx_value_plot/3,
                 mtx_value_column_frequencies/3,
-                mtx_columns_collapse/6,                                       % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
+                mtx_columns_collapse/6, % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
                 mtx_columns_cross_table/5,
-
-                mtx_read_table/4,    % +CsvF, +RowsName, -Table, +Opts
-
+                mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
+                mtx_read_stream/3, 
+                mtx_read_stream/4,  % +Row0, +Stream, -Data, +CsvOpts
 				mtx_pos_elem/5, mtx_pos_elem/6,
 				mtx_apply/4,
 				mtx_data/2, mtx_dims/3,
@@ -132,6 +131,7 @@
 :- lib(mtx_columns_collapse/6).
 :- lib(mtx_row_apply/4).
 :- lib(mtx_bi_opts/5).
+:- lib(mtx_read_stream/4).
 
 :- lib(end(mtx)).
 

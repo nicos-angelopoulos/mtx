@@ -2,7 +2,9 @@
 --------------------
 
 0.3
-
+     18.11.12   IFACE:  mtx_read_stream/3,4 (this should be in library(csv)
+                LIB:    new private predicate mtx_options_csv/4.
+                DOC:    fixed @tags misformating due to Opts list mangle 
      18.10.05   UPDATE: change throw error from either_of to in_one_of()
      18.06.05   UPDATE: use newly introduced csv:csv_write_row/3 instead of locally defined version.
 
