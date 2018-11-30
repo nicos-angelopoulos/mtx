@@ -45,6 +45,7 @@
 				mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
+                mtx_column_subsets/3,
                 mtx_version/2
 			  ]
 		).
@@ -131,6 +132,7 @@
 :- lib(mtx_columns_collapse/6).
 :- lib(mtx_row_apply/4).
 :- lib(mtx_bi_opts/5).
+:- lib(mtx_column_subsets/3).
 :- lib(mtx_read_stream/4).
 
 :- lib(end(mtx)).

@@ -2,6 +2,7 @@
 --------------------
 
 0.3
+     18.11.30   IFACE:  added mtx_column_subsets/3 to module interface
      18.11.12   IFACE:  mtx_read_stream/3,4 (this should be in library(csv)
                 LIB:    new private predicate mtx_options_csv/4.
                 DOC:    fixed @tags misformating due to Opts list mangle 
