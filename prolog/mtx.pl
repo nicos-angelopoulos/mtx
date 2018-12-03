@@ -41,7 +41,7 @@
 				mtx_apply/4,
 				mtx_data/2, mtx_dims/3,
 				mtx_factors/3, mtx_transpose/2,
-				mtx_prolog/3,
+				mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
 				mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
