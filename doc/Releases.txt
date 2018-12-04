@@ -1,7 +1,7 @@
 ---   Releases   ---
 --------------------
 
-0.3
+0.3 
      18.12.04   DOC:    removed <br> from paragraph ending.
                 DOC:    fixed asserting mtx/1 to an_mtx/1 & expression example
      18.12.03   IFACE:  added conversion from Prolog to mtx (and some to.be.dones)
