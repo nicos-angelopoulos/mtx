@@ -5,7 +5,7 @@
 
 %% mtx_column_add( +Mtx, +N, +Values, -Out ).
 %
-%  Add Values as the Nth column in Out with input columns taken from Mtx.<br>
+%  Add Values as the Nth column in Out with input columns taken from Mtx.
 % 
 %  Values should be a list of values, or a term of the form:
 %  * transform(K,Goal,Hdr)
