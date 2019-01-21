@@ -40,13 +40,12 @@ mtx_column_join( MtxBIn, ClmB, MtxM, MtxOut, Args ) :-
     mtx( MtxBIn, MtxB ),
     mtx( MtxMIn, MtxIn ),
     options( at(AtIn), Opts ),
-    ( AtIn -> [] -> 
+    ( AtIn == [] ->
         mtx_header( MtxB, MtxBHdr ),
         functor( MtxbHdr, _, Arity ),
         At is Arity + 1
         ;
         AtIn = At
     ),
-
     options( add_columns(AddCidsIn), Options ),
     mtx( MtxOut, MtxOutPrv ).

@@ -2,8 +2,9 @@
 --------------------
 
 0.3 
-     19.01.21   FIXED:  removed wrongly random bit of pasted code
-     19.01.21   IFACE:  started work on mtx_column_join/5
+     19.01.21   OPTS:   implemented at()
+                FIXED:  removed wrongly random bit of pasted code
+                IFACE:  started work on mtx_column_join/5
      18.12.04   DOC:    removed <br> from paragraph ending
                 DOC:    fixed asserting mtx/1 to an_mtx/1 & expression example
      18.12.03   IFACE:  added conversion from Prolog to mtx (and some to.be.dones)
