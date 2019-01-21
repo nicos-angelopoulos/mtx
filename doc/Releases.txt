@@ -2,6 +2,7 @@
 --------------------
 
 0.3 
+     19.01.21   FIXED:  removed wrongly random bit of pasted code
      19.01.21   IFACE:  started work on mtx_column_join/5
      18.12.04   DOC:    removed <br> from paragraph ending
                 DOC:    fixed asserting mtx/1 to an_mtx/1 & expression example
