@@ -23,6 +23,7 @@
                 mtx_column_frequency_threshold/5,
 				mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
 				mtx_column_values_select/6,
+                mtx_column_join/5, % +MtxBase, +Column, +MtxExt, -MtxOut, +Opts
 				mtx_columns_copy/4,
 				mtx_columns_partition/4,
 				mtx_columns_partition/5,
@@ -134,6 +135,7 @@
 :- lib(mtx_bi_opts/5).
 :- lib(mtx_column_subsets/3).
 :- lib(mtx_read_stream/4).
+:- lib(mtx_column_join/5).
 
 :- lib(end(mtx)).
 
