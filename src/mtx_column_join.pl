@@ -37,10 +37,23 @@ Opts
 */
 mtx_column_join( MtxBIn, ClmB, MtxM, MtxOut, Args ) :-
     options_append( mtx_column_join, Args, Opts ),
+<<<<<<< HEAD
     mtx( MtxBIn, [HdrB|RowsB] ),
     mtx( MtxMIn, [HdrM|RowsM] ),
     options( at(AtOpt), Opts ),
     mtx_column_join_at_list( AtOpt, HdrB, HdrM, Ats ),
+=======
+    mtx( MtxBIn, MtxB ),
+    mtx( MtxMIn, MtxIn ),
+    options( at(AtIn), Opts ),
+    ( AtIn == [] ->
+        mtx_header( MtxB, MtxBHdr ),
+        functor( MtxbHdr, _, Arity ),
+        At is Arity + 1
+        ;
+        AtIn = At
+    ),
+>>>>>>> b4c46ea6c9df2ce096109a68d251c5cfc26c3f49
     options( add_columns(AddCidsIn), Options ),
     mtx_column_join_add_columns( AddCidsIn, HdrM, CIdcs ),
 
