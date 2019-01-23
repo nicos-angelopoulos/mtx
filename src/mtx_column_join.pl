@@ -14,7 +14,7 @@ position and
 
 Opts
   * add_columns([])
-    which columns to add (all by default)
+    which columns to add (all exept ClmBase/ClmMatch by default)
 
   * at(At=[])
     if an integer, additional columns are added from that position onwards.
@@ -24,7 +24,7 @@ Opts
   * is_unique(IsUnique=true)
     should we check that only a single row matches
 
-  * match_column(MatchClm)
+  * match_column(ClmMatch)
     column id of MtxExt if different that ClmBase
 
 ==
@@ -37,16 +37,34 @@ Opts
 */
 mtx_column_join( MtxBIn, ClmB, MtxM, MtxOut, Args ) :-
     options_append( mtx_column_join, Args, Opts ),
-    mtx( MtxBIn, MtxB ),
-    mtx( MtxMIn, MtxIn ),
-    options( at(AtIn), Opts ),
-    ( AtIn -> [] -> 
-        mtx_header( MtxB, MtxBHdr ),
-        functor( MtxbHdr, _, Arity ),
-        At is Arity + 1
-        ;
-        AtIn = At
-    ),
-
+    mtx( MtxBIn, [HdrB|RowsB] ),
+    mtx( MtxMIn, [HdrM|RowsM] ),
+    options( at(AtOpt), Opts ),
+    mtx_column_join_at_list( AtOpt, HdrB, HdrM, Ats ),
     options( add_columns(AddCidsIn), Options ),
+    mtx_column_join_add_columns( AddCidsIn, HdrM, CIdcs ),
+
     mtx( MtxOut, MtxOutPrv ).
+
+mtx_column_join_add_columns( AddCidsIn, HdrM, CIdcs ),
+    ( AddCidsIn == [] -> AddCids = 
+
+mtx_column_join_at_list( AtOpt, HdrB, HdrM, At ) :-
+    \+ var(AtOpt), % fixme: error
+    ( AtOpt == [] ->
+        functor( HdrB, _, ArityB ),
+        AtIn is ArityB + 1
+        ;
+        AtIn = AtOpt
+    ),
+    ( AtIn = [_|_] ->
+        At = AtIn
+        ;
+        ( integer(AtIn) ->
+            functor( HdrM, _, ArityM ),
+            MLim is ArityM - 1,
+            findall( AnAt, between(1,MLin,AnAt), At )
+            ;
+            throw( unknown_type_for_at(AtIn) )  % fixme: pretty print
+        )
+    ).
