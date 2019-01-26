@@ -3,6 +3,7 @@
 
 0.3 
      19.01.26   UPDATE: implemented options match_column(Mc) and add_columns(Acs)
+                UPDATE: first working version
      19.01.21   UPDATE: implemented first option (at(At))
                 FIXED:  removed wrongly inserted random bit of pasted code (i hope)
                 IFACE:  started work on mtx_column_join/5
