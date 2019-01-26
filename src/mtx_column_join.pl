@@ -35,32 +35,29 @@ Opts
 @version  0.1 2019/1/20
 
 */
-mtx_column_join( MtxBIn, ClmB, MtxM, MtxOut, Args ) :-
+mtx_column_join( MtxB, ClmB, MtxM, MtxOut, Args ) :-
     options_append( mtx_column_join, Args, Opts ),
-<<<<<<< HEAD
-    mtx( MtxBIn, [HdrB|RowsB] ),
-    mtx( MtxMIn, [HdrM|RowsM] ),
+    mtx( MtxB, [HdrB|RowsB] ),
+    mtx( MtxM, [HdrM|RowsM] ),
     options( at(AtOpt), Opts ),
     mtx_column_join_at_list( AtOpt, HdrB, HdrM, Ats ),
-=======
-    mtx( MtxBIn, MtxB ),
-    mtx( MtxMIn, MtxIn ),
-    options( at(AtIn), Opts ),
-    ( AtIn == [] ->
-        mtx_header( MtxB, MtxBHdr ),
-        functor( MtxbHdr, _, Arity ),
-        At is Arity + 1
-        ;
-        AtIn = At
-    ),
->>>>>>> b4c46ea6c9df2ce096109a68d251c5cfc26c3f49
-    options( add_columns(AddCidsIn), Options ),
-    mtx_column_join_add_columns( AddCidsIn, HdrM, CIdcs ),
+    ( memberchk(match_column(ClmM),Opts) -> true; ClmM = ClmB ),
+    mtx_header_column_name_pos( HdrM, ClmM, _CnmM, PosM ),
+    options( add_columns(AddCidsIn), Opts ),
+    mtx_column_join_add_columns( AddCidsIn, HdrM, PosM, MIdcs ),
 
-    mtx( MtxOut, MtxOutPrv ).
+    here( RowsB, Ats, RowsM, MIdcs, RowsOut ),
+    here_heders( HdrB, HdrM, HdrOut ),
+    mtx( MtxOut, [HdrOut|RowsOut] ).
 
-mtx_column_join_add_columns( AddCidsIn, HdrM, CIdcs ),
-    ( AddCidsIn == [] -> AddCids = 
+mtx_column_join_add_columns( AddCidsIn, HdrM, PosM, CIdcs ) :-
+    ( AddCidsIn == [] -> 
+                functor( HdrM, _, MArity ),
+                numlist( 1, MArity, AllPossM ),
+                nth1( PosM, AllPossM, _, CIdcs )
+                ; 
+                mtx_header_cids_order( AddCidsIn, CIdcs )
+    ).
 
 mtx_column_join_at_list( AtOpt, HdrB, HdrM, At ) :-
     \+ var(AtOpt), % fixme: error
@@ -76,7 +73,7 @@ mtx_column_join_at_list( AtOpt, HdrB, HdrM, At ) :-
         ( integer(AtIn) ->
             functor( HdrM, _, ArityM ),
             MLim is ArityM - 1,
-            findall( AnAt, between(1,MLin,AnAt), At )
+            findall( AnAt, between(1,MLim,AnAt), At )
             ;
             throw( unknown_type_for_at(AtIn) )  % fixme: pretty print
         )

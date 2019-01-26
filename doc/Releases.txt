@@ -2,13 +2,9 @@
 --------------------
 
 0.3 
-<<<<<<< HEAD
-     19.01.21   UPDATE: implemented first option (at/1)
+     19.01.26   UPDATE: implemented options match_column(Mc) and add_columns(Acs)
+     19.01.21   UPDATE: implemented first option (at(At))
                 FIXED:  removed wrongly inserted random bit of pasted code (i hope)
-=======
-     19.01.21   OPTS:   implemented at()
-                FIXED:  removed wrongly random bit of pasted code
->>>>>>> b4c46ea6c9df2ce096109a68d251c5cfc26c3f49
                 IFACE:  started work on mtx_column_join/5
      18.12.04   DOC:    removed <br> from paragraph ending
                 DOC:    fixed asserting mtx/1 to an_mtx/1 & expression example
