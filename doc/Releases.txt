@@ -2,6 +2,7 @@
 --------------------
 
 0.3 
+     19.01.27   UPDATE: first complete working version
      19.01.26   UPDATE: implemented options match_column(Mc) and add_columns(Acs)
                 UPDATE: first working version
      19.01.21   UPDATE: implemented first option (at(At))
