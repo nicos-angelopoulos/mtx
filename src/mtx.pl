@@ -6,6 +6,7 @@
 
 mtx_defaults( Defs ) :-
 	Defs = [ report(false),
+             convert(false),
 	         csv_read([]),
 	         csv_write([]),
 		    cache(false),
@@ -130,6 +131,9 @@ Opts is a term or list of terms from the following:
   and in addition to using the cache when reloading the csv file it also allow 
   access to the matrix via Handle, that is =!mtx(Handle,Mtx)!=
 
+  * convert(Conv=false)
+  adds convert(Conv) to Wopts and Ropts (the default here, flipts the current convert(true) default in csv_write_file/3 - also for read)
+  
   * csv_read(Ropts=[])
   options for csv_read_file/3
 
@@ -463,6 +467,7 @@ mtx_data_from_store( Handle, _Rows ) :-
 	throw( pack_error(mtx,mtx/3,handle_inconsistency(Handle)) ).
 
 mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
+    % 19.01.30: we should probably give RoWOpts priority for match() and separator() ...
     ( memberchk(sep(MtxSep),Opts) ->
         mtx_sep( MtxSep, CsvSep ),
         SepOpts = [separator(CsvSep)|RoWOpts]
@@ -470,10 +475,12 @@ mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
         SepOpts = RoWOpts
     ),
     ( memberchk(match(Match),Opts) ->
-        CsvOpts = [match_arity(Match)|SepOpts]
+        MatOpts = [match_arity(Match)|SepOpts]
         ;
-        CsvOpts = SepOpts
-    ).
+        MatOpts = SepOpts
+    ),
+    options( convert(Conv), Opts ),
+    append( MatOpts, [convert(Conv)], CsvOpts ).
 
 mtx_report( true, Op, File, Rows ) :-
 	onoma( Op, OpOnoma ),

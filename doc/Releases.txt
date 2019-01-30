@@ -3,6 +3,9 @@
 
 0.3 
      19.01.27   UPDATE: first complete working version
+                DELETE: spurious cut and paster error defining term_in_stream/2 ?!
+                FIXED:  use en_list/2 on in Opts of mtx_prolog/3
+                OPT:    convert(false), it is now the default, in contrast to csv//2
      19.01.26   UPDATE: implemented options match_column(Mc) and add_columns(Acs)
                 UPDATE: first working version
      19.01.21   UPDATE: implemented first option (at(At))

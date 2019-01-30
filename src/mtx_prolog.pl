@@ -1,4 +1,6 @@
 
+:- lib(stoics_lib:en_list/2).
+
 mtx_prolog_defaults( [auto_pname(Apname)|_], Defs ) :-
 	Defs = [predicate_name(Apname), % out_stem(Astem),
 	        header_remove(false),consult(save)
@@ -60,7 +62,7 @@ Modalities
 @version  0.1 2015/3/20
 @version  0.2 2018/12/3, added conversion from Prolog to mtx.
 @tbd change header_remove(Rmv) to keep_header({true,false,*as_comment*}).
-@tbd change allow for header pred names (harmonize with bio_db ?'s _info...)
+@tbd change allow for header pred names (harmonize with bio_db ?s _info...)
 @tbd modalities list
 @tbd add examples and test conversion from Prolog to mtx
 
@@ -68,19 +70,12 @@ Modalities
 mtx_prolog( Mtx, Prolog ) :-	
     mtx_prolog( Mtx, Prolog, [] ).
 
-mtx_prolog( Mtx, Prolog, Args ) :-
+mtx_prolog( Mtx, Prolog, ArgS ) :-
+    en_list( ArgS, Args ),
 	mtx_pname_stem( Mtx, APname, _AStem ),
 	options_append( mtx_prolog, [auto_pname(APname)|Args], Opts ),
 	debug( mtx, 'mtx_prolog/3 opts: ~w', [Opts] ),
     mtx_prolog_opts( Mtx, Prolog, Opts ).
-
-term_in_stream(Term, In) :-
-        repeat,
-        read(In, T),
-        (   T == end_of_file
-        ->  !, fail
-        ;   T = Term
-        ).
 
 mtx_prolog_opts( Mtx, Prolog, Opts ) :-
     ground( Prolog ),
