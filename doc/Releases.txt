@@ -2,6 +2,7 @@
 --------------------
 
 0.3 
+     19.01.31   FIXED:  some code was deleted ? also updated for csv_options/9
      19.01.27   UPDATE: first complete working version
                 DELETE: spurious cut and paster error defining term_in_stream/2 ?!
                 FIXED:  use en_list/2 on in Opts of mtx_prolog/3
