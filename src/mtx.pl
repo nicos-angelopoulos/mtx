@@ -4,14 +4,16 @@
 :- lib(stoics_lib:locate/3).
 :- lib(stoics_lib:expand_spec/2).
 
+% This is also called from mtx_options_select/5. Be mindfull if it is being changed.
+%
 mtx_defaults( Defs ) :-
 	Defs = [ report(false),
              convert(false),
 	         csv_read([]),
 	         csv_write([]),
-		    cache(false),
-		    from_cache(true),
-            skip_heading(false)
+		     cache(false),
+		     from_cache(true),
+             skip_heading(false)
             % sep(0',)  % has no default value
 	       ].
 

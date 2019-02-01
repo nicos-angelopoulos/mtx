@@ -1,27 +1,79 @@
 
-mtx_row_apply_defaults( [on_header(false)|MtxOpts] ) :-
-    mtx_defaults( MtxOpts ).
+mtx_row_apply_defaults( Args, Defs ) :-
+    mtx_defaults( MtxOpts ),
+    ( memberchk(out_is_mtx(false),Args) ->
+        DefHdr = false
+        ;
+        DefHdr = true
+    ),
+    Defs = [out_is_mtx(true),out_has_header(DefHdr),on_header(false)|MtxOpts].
 
-/**  mtx_row_apply( +Goal, +MtxIn, -MtxOut, +Opts ).
+/**  mtx_row_apply( +Goal, +MtxIn, -Out, +Opts ).
 
-Apply Goal to all rows of MtxIn to produce MtxOut.<br>
-If MtxIn and MtxOut are files, the rows are processed on-the-fly with no <br> 
+Apply Goal to all rows of MtxIn to produce Out.<br>
+If MtxIn and MtxOut are files (ground atoms), the rows are processed on-the-fly with no <br> 
 intermediate data structures being created. This reduces memory usage which <br>
-which can be prohibitive when using csv_write_file/3.
+which used to be prohibitive when using csv_write_file/3 (that has been fixed,
+but it is more memory efficient to use the specialised version).
+Goal is called in user by default (use Mod:G, to overwrite this).
+
+Please note that Out would usually be another matrix,
+however, the predicate can also produce other outputs. 
+You need to set _is_mtx(false)_ in this case, (note thaugh
+this will also (a) change the default of _Hdr_ to _false_ and 
+(b) by pass calling mtx/2 on the output).
 
 Opts
+  * in_MtxOpt(InpMtxOpt)
+  any option you want to pass to the input mtx/3 call
+   
   * on_header(OnH=false)
-     Do not apply 
-==
-?- mtx( '../data/mtcars.csv', MtC ), mtx_row_apply( =, MtC, MtA, [] ).
-MtC = MtA, MtA = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, 6.0, 160.0, 110.0, 3.9, 2.62, 16.46, 0.0, 1.0, 4.0, 4.0), row(21.0, 6.0, 160.0, 110.0, 3.9, 2.875, 17.02, 0.0, 1.0, 4.0, 4.0), row(22.8, 4.0, 108.0, 93.0, 3.85, 2.32, 18.61, 1.0, 1.0, 4.0, 1.0), row(21.4, 6.0, 258.0, 110.0, 3.08, 3.215, 19.44, 1.0, 0.0, 3.0, 1.0), row(18.7, 8.0, 360.0, 175.0, 3.15, 3.44, 17.02, 0.0, 0.0, 3.0, 2.0), row(18.1, 6.0, 225.0, 105.0, 2.76, 3.46, 20.22, 1.0, 0.0, 3.0, 1.0), row(14.3, 8.0, 360.0, 245.0, 3.21, 3.57, 15.84, 0.0, 0.0, 3.0, 4.0), row(..., ..., ..., ..., ..., ..., ..., ..., ..., ..., ...)|...].
+  do not apply Call on header row
 
-?- tmp_file( mtcars_clone, TmpF ), mtx_row_apply( =, '../data/mtcars.csv', TmpF, [] ).
+  * out_has_header(Hdr=true)
+  reply has header (default changes to _false_, if _IsMtx=false_)
+
+  * out_is_mtx(IsMtx=true)
+  set to false if output is not a matrix
+
+  * out_MtxOpt(MtxOutOpt)
+  any option you want to pass to the output mtx/3 call
+
+In addition you can give any option that you want to pass to both mtx/3 calls from those
+that are recognised by mtx/3 (see mtx_options_select/5). For example, _convert(true)_
+will be passed to both mtx/3 calls, whereas _in_convert(true)_ will only be pased to the 
+input call.
+
 ==
+?- mtx( data('mtcars.csv'), MtC ), mtx_row_apply( =, MtC, MtA, [] ).
+MtC = MtA, MtA = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row('21.0', ...), ... ].
+
+?- mtx( data('mtcars.csv'), MtC ), mtx_row_apply( =, MtC, MtA, out_has_header(false) ).
+MtC = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, ...), ... ],
+MtA = [row('21.0', '6.0', '160.0', '110.0', '3.9', '2.62', '16.46', '0.0', '1.0', '4.0', '4.0'), ...].
+
+?- assert((sum_args(Term,Sum) :- Term=..[_|Args], sumlist(Args,Sum))).
+?- sum_args( a(1,2,3), Sum ).
+Sum = 6.
+?- mtx_row_apply(sum_args,data('mtcars.csv'),Sums,[convert(true),out_is_mtx(false)]).
+Sums = [328.97999999999996, 329.79499999999996, 259.58, ... ].
+
+?- tmp_file( mtcars_clone, TmpF ), mtx_row_apply( =, data('mtcars.csv', TmpF, [] ).
+==
+
+On *nix only:
+==
+?- library(by_unix).
+?- tmp_file( mtcars_clone, TmpF ), mtx_row_apply( =, data('mtcars.csv'), TmpF, [] ), @ head( -2, TmpF ).
+mpg,cyl,disp,hp,drat,wt,qsec,vs,am,gear,carb
+21.0,6.0,160.0,110.0,3.9,2.62,16.46,0.0,1.0,4.0,4.0
+TmpF = '/tmp/swipl_mtcars_clone_21824_1'.
+===
 
 @author nicos angelopoulos
 @version  0.1 2018/6/5
-@ see mtx_bi_opts/2
+@version  0.2 2019/2/1, added support for non Mtx outputs: out_has_header() and out_is_mtx(). use mtx_otpions_select/5
+@see mtx_bi_opts/2, mtx_options_select/5.
 
 */
 mtx_row_apply( Goal, MtxIn, MtxOut, Args ) :-
@@ -31,22 +83,25 @@ mtx_row_apply( Goal, MtxIn, MtxOut, Args ) :-
     !,
     options_append( mtx_row_apply, Args, Opts ),
     mtx_row_apply_files( Goal, File, MtxOut, Opts ).
-mtx_row_apply( Goal, MtxIn, MtxOut, Args ) :-    % the proto implemenation
-    options_append( mtx_row_apply, Args, Opts ),
-    mtx( MtxIn, Mtx, Opts ),
+mtx_row_apply( GoalPrv, MtxIn, MtxOut, Args ) :-    % the proto implemenation
+    options_append( mtx_row_apply, Args, AllOpts ),
+    mtx_options_select( AllOpts, in, InMtxOpts, NonInOpts ),
+    mtx( MtxIn, Mtx, InMtxOpts ),
+    mtx_options_select( NonInOpts, out, OutMtxOpts, Opts ),
     options( on_header(OnH), Opts ),
-    mtx_row_apply( OnH, Goal, Mtx, MtxForOut, Opts ),
-    option_out( out_match, match, Opts, Opts1 ),
-    option_out( out_sep, sep, Opts1, Opts2 ),
-    mtx( MtxOut, MtxForOut, Opts2 ).
+    ( GoalPrv = _:_ -> Goal = GoalPrv ; Goal= user:GoalPrv ),
+    mtx_row_apply( OnH, Goal, Mtx, MtxForOutPrv, Opts ),
+    options( out_has_header(OutHasHdr), Opts ),
+    mtx_row_out_header( OutHasHdr, MtxForOutPrv, MtxForOut ),
+    options( out_is_mtx(OutIsMtx), Opts ),
+    mtx_row_out_mtx( OutIsMtx, MtxOut, MtxForOut, OutMtxOpts ).
 
-option_out( OptName, RealName, Opts1, Opts2 ) :-
-    Opt =.. [OptName,OptArg],
-    select( Opt, Opts1, Opts0 ),
-    !,
-    Rpt =.. [RealName,OptArg],
-    Opts2 = [Rpt|Opts0].
-option_out( _OptName, _RealName, Opts, Opts ).
+mtx_row_out_mtx( true, MtxOut, MtxForOut, Opts ) :-
+    mtx( MtxOut, MtxForOut, Opts ).
+mtx_row_out_mtx( false, Out, Out, _Opts ).
+
+mtx_row_out_header( true, MtxForOut, MtxForOut ).
+mtx_row_out_header( false, [_|MtxForOut], MtxForOut ).
 
 mtx_row_apply( true, Goal, [Hdr|Rows], [NewHdr|NewRows], Opts ) :-
     call( Goal, Hdr, NewHdr ),

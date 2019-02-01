@@ -15,6 +15,7 @@
 				mtx_column/3, mtx_column/5, mtx_column_default/4, 
 				mtx_column_set/3, mtx_column_set/4,
 				mtx_column_name_options/5, mtx_column_name_options/3,
+                mtx_options_select/4, mtx_options_select/5,
 				mtx_column_select/4, 
 				mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_columns_kv/6,
 				mtx_column_add/4,
@@ -136,6 +137,7 @@
 :- lib(mtx_column_subsets/3).
 :- lib(mtx_read_stream/4).
 :- lib(mtx_column_join/5).
+:- lib(mtx_options_select/5).
 
 :- lib(end(mtx)).
 
