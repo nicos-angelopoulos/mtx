@@ -2,6 +2,7 @@
 --------------------
 
 0.3 
+     19.02.08   FIXED:  missing lib load of mtx_options_csv/4
      19.02.01   DOC:    update example to pick mtcars.csv from pack location
                 OPT:    out_has_header() out_is_mtx() [mtx_row_apply] supports non-mtx outputs
                 IFACE:  mtx_options_select/4,5
