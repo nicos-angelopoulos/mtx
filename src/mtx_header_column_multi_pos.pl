@@ -1,15 +1,20 @@
 
 :- lib( mtx_call_user_mod/3 ).
 
-%% mtx_header_column_multi_pos( +Hdr, +Cid, -Cnms, -Poss ) :-
+%% mtx_header_column_multi_pos( +Hdr, +Cid, -Cnms, -Poss ).
+%
 % Findall Cnms and Poss corresponding to Cid. Cid could be a number (Cnms and Poss are then 
 % singletons), a list of Cids (numbers or column names) or predicate that can be called 
-% on all Hdr args (then Cnms and Poss correspond to the column names that were true.
+% on all Hdr args (then Cnms and Poss correspond to the column names that were true).
 %
 %==
 % ?- mtx_header_column_multi_pos( hdr(a,b,a,c), =(a), Cnms, Poss ).
 %  Cnms = [a, a],
 %  Poss = [1, 3].
+%
+% ?- mtx_header_column_multi_pos( hdr(a,b,a,c), [b,c], Cnms, Pos ),
+% Cnms = [b, c],
+% Pos = [2, 4].
 %==
 %
 % @author nicos angelopoulos
@@ -18,7 +23,7 @@
 mtx_header_column_multi_pos( Hdr, Cid, Cnms, Poss ) :-
 	is_list( Cid ),
 	!,
-	maplist( mtx_header_column_pos(Hdr), Cid, Cnms, Poss ).
+	maplist( mtx_header_column_name_pos(Hdr), Cid, Cnms, Poss ).
 mtx_header_column_multi_pos( Hdr, Cid, Cnms, Poss ) :-
 	atomic( Cid ),
 	( number(Cid); \+ (current_predicate(Cid/1); current_predicate(user:Cid/1)) ),
