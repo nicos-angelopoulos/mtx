@@ -12,7 +12,7 @@
 %  Cnms = [a, a],
 %  Poss = [1, 3].
 %
-% ?- mtx_header_column_multi_pos( hdr(a,b,a,c), [b,c], Cnms, Pos ),
+% ?- mtx_header_column_multi_pos( hdr(a,b,a,c), [b,c], Cnms, Pos ).
 % Cnms = [b, c],
 % Pos = [2, 4].
 %==
