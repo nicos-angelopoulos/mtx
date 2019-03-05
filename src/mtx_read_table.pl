@@ -48,9 +48,9 @@ mtx_read_table( File, RowsName, Table, OptionS ) :-
             csv_read_row(Stream, Row0, RecOptionsPrv),
             ( Match == true -> 
                 % fixme: this hacking:
-                RecOptionsPrv = csv_options(CopA,CopB,CopC,CopD,CopE,CopF,HdrAri,CopH),
+                RecOptionsPrv = csv_options(CopA,CopB,CopC,CopD,CopE,CopF,HdrAri,CopH,CopI),
                 RowsAri is HdrAri + 1,
-                RecOptions    = csv_options(CopA,CopB,CopC,CopD,CopE,CopF,RowsAri,CopH)
+                RecOptions    = csv_options(CopA,CopB,CopC,CopD,CopE,CopF,RowsAri,CopH,CopI)
                 ;
                 RecOptionsPrv = RecOptions
             ),

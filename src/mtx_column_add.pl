@@ -5,7 +5,7 @@
 
 %% mtx_column_add( +Mtx, +N, +Values, -Out ).
 %
-%  Add Values as the Nth column in Out with input columns taken from Mtx.<br>
+%  Add Values as the Nth column in Out with input columns taken from Mtx.
 % 
 %  Values should be a list of values, or a term of the form:
 %  * transform(K,Goal,Hdr)
@@ -24,18 +24,21 @@
 %  of the form abs_pos(Abs) (see mtx_relative_pos/5).
 % 
 %==
-% ?- Mtx = [row(a, b, d), row(1, 2, 4), row(5, 6, 8)], assert( mtx(Mtx) ).
+% ?- Mtx = [row(a, b, d), row(1, 2, 4), row(5, 6, 8)], assert( an_mtx(Mtx) ).
 %
-% ?- mtx(Mtx), mtx_column_add( Mtx, 3, [c,3,7], New ).
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, 3, [c,3,7], New ).
 % New = [row(a, b, c, d), row(1, 2, 3, 4), row(5, 6, 7, 8)].
 %
-% ?- mtx(Mtx), mtx_column_add( Mtx, -1, [c,3,7], New ).
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, 1+2, [c,3,7], New ).
 % New = [row(a, b, c, d), row(1, 2, 3, 4), row(5, 6, 7, 8)].
 %
-% ?- mtx(Mtx), mtx_column_add( Mtx, d, [c,3,7], New ).
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, -1, [c,3,7], New ).
 % New = [row(a, b, c, d), row(1, 2, 3, 4), row(5, 6, 7, 8)].
 %
-% ?- mtx(Mtx), mtx_column_add( Mtx, 3, transform(3,plus(1),plus1), New ).
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, d, [c,3,7], New ).
+% New = [row(a, b, c, d), row(1, 2, 3, 4), row(5, 6, 7, 8)].
+%
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, 3, transform(3,plus(1),plus1), New ).
 % New = [row(a, b, d, plus1), row(1, 2, 4, 5), row(5, 6, 8, 9)].
 % 
 % ?- Mtx = [hdr(a,b,a,c), row(1,2,1,3), row(2,3,2,4)],

@@ -1,8 +1,33 @@
 ---   Releases   ---
 --------------------
 
-0.3
-
+0.3 
+     19.02.26   OPTS:   new value first for is_unique(IsUnique)
+                FIXED:  do not consume matching lines if we are in non exhaustive join (is_exhaustive(false))
+     19.02.18   FIXED:  call to mtx_header_column_(name_)pos/4
+                DOC:    fixed broken doc_server syntax + example
+     19.02.08   FIXED:  missing lib load of mtx_options_csv/4
+     19.02.01   DOC:    update example to pick mtcars.csv from pack location
+                OPTS:   out_has_header() out_is_mtx() [mtx_row_apply] supports non-mtx outputs
+                IFACE:  mtx_options_select/4,5
+     19.01.31   FIXED:  some code was deleted ? also updated for csv_options/9
+     19.01.27   UPDATE: first complete working version
+                DELETE: spurious cut and paster error defining term_in_stream/2 ?!
+                FIXED:  use en_list/2 on in Opts of mtx_prolog/3
+                OPT:    convert(false), it is now the default, in contrast to csv//2
+     19.01.26   UPDATE: implemented options match_column(Mc) and add_columns(Acs)
+                UPDATE: first working version
+     19.01.21   UPDATE: implemented first option (at(At))
+                FIXED:  removed wrongly inserted random bit of pasted code (i hope)
+                IFACE:  started work on mtx_column_join/5
+     18.12.04   DOC:    removed <br> from paragraph ending
+                DOC:    fixed asserting mtx/1 to an_mtx/1 & expression example
+     18.12.03   IFACE:  added conversion from Prolog to mtx (and some to.be.dones)
+     18.11.30   IFACE:  added mtx_column_subsets/3 to module interface
+     18.11.12   IFACE:  mtx_read_stream/3,4 (this should be in library(csv)
+                LIB:    new private predicate mtx_options_csv/4.
+                DOC:    fixed @tags misformating due to Opts list mangle 
+     18.10.05   UPDATE: change throw error from either_of to in_one_of()
      18.06.05   UPDATE: use newly introduced csv:csv_write_row/3 instead of locally defined version.
 
 0.2         @   18.06.05

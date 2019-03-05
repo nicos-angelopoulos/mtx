@@ -15,6 +15,7 @@
 				mtx_column/3, mtx_column/5, mtx_column_default/4, 
 				mtx_column_set/3, mtx_column_set/4,
 				mtx_column_name_options/5, mtx_column_name_options/3,
+                mtx_options_select/4, mtx_options_select/5,
 				mtx_column_select/4, 
 				mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_columns_kv/6,
 				mtx_column_add/4,
@@ -23,7 +24,7 @@
                 mtx_column_frequency_threshold/5,
 				mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
 				mtx_column_values_select/6,
-
+                mtx_column_join/5, % +MtxBase, +Column, +MtxExt, -MtxOut, +Opts
 				mtx_columns_copy/4,
 				mtx_columns_partition/4,
 				mtx_columns_partition/5,
@@ -33,19 +34,20 @@
 				mtx_columns_values/3,
                 mtx_value_plot/3,
                 mtx_value_column_frequencies/3,
-                mtx_columns_collapse/6,                                       % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
+                mtx_columns_collapse/6, % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
                 mtx_columns_cross_table/5,
-
-                mtx_read_table/4,    % +CsvF, +RowsName, -Table, +Opts
-
+                mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
+                mtx_read_stream/3, 
+                mtx_read_stream/4,  % +Row0, +Stream, -Data, +CsvOpts
 				mtx_pos_elem/5, mtx_pos_elem/6,
 				mtx_apply/4,
 				mtx_data/2, mtx_dims/3,
 				mtx_factors/3, mtx_transpose/2,
-				mtx_prolog/3,
+				mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
 				mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
+                mtx_column_subsets/3,
                 mtx_version/2
 			  ]
 		).
@@ -132,6 +134,10 @@
 :- lib(mtx_columns_collapse/6).
 :- lib(mtx_row_apply/4).
 :- lib(mtx_bi_opts/5).
+:- lib(mtx_column_subsets/3).
+:- lib(mtx_read_stream/4).
+:- lib(mtx_column_join/5).
+:- lib(mtx_options_select/5).
 
 :- lib(end(mtx)).
 

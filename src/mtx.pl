@@ -1,15 +1,20 @@
 
+:- lib(mtx_options_csv/4).
 :- lib(onoma/2).
 :- lib(stoics_lib:holds/2).
 :- lib(stoics_lib:locate/3).
 :- lib(stoics_lib:expand_spec/2).
 
+% This is also called from mtx_options_select/5. Be mindfull if it is being changed.
+%
 mtx_defaults( Defs ) :-
 	Defs = [ report(false),
+             convert(false),
 	         csv_read([]),
 	         csv_write([]),
-		    cache(false),
-		    from_cache(true)
+		     cache(false),
+		     from_cache(true),
+             skip_heading(false)
             % sep(0',)  % has no default value
 	       ].
 
@@ -122,37 +127,56 @@ Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
 ==
 
 Opts is a term or list of terms from the following:
-* cache(Cache=false)
+
+  * cache(Cache=false)
   if _true_ file is cached as a fact and attempts to reload the same csv file will use
   the cache. Any other value (Handle) than _true_ or _false_ will cache the file
   and in addition to using the cache when reloading the csv file it also allow 
   access to the matrix via Handle, that is =!mtx(Handle,Mtx)!=
-* csv_read(Ropts=[])
-  options for csv_read_file/3
-* csv_write(Wopts=[])
-  options for csv_write_file/3
-* from_cache(FromCache=true)
-  when _true_ reads from cache if it can match Any to a handle or a file
-* input_file(InpFile)
-  defines input file for the purposes of creating an output file in conjuction with Psfx
-* match(Match)
-  if present adds match_arity(Match) into Wopts and Ropts
-* output_postfix(Psfx)
-  the postfix of the output file (added at end of stem of InpFile)
-* output_file(OutF)
-  defines output to csv when Any is a var/1 and Canonical is ground/1.
-* report(Rep=false)
-  report the read/write and dims of corresponding matrix
-* ret_mtx_input(InpF)
-  full path of the input file
-* rows_name(RowsName=_)
-  if present the header is left padded with RowsName
-* sep(Sep)
-  if present adds separator(SepCode) into Wopts and Ropts, via mtx_sep(Sep,SepCode), mtx_sep/2
-* type(Type)
-  returns the type of input matrix, see mtx_type/2
 
+  * convert(Conv=false)
+  adds convert(Conv) to Wopts and Ropts (the default here, flipts the current convert(true) default in csv_write_file/3 - also for read)
+  
+  * csv_read(Ropts=[])
+  options for csv_read_file/3
+
+  * csv_write(Wopts=[])
+  options for csv_write_file/3
+
+  * from_cache(FromCache=true)
+  when _true_ reads from cache if it can match Any to a handle or a file
+
+  * input_file(InpFile)
+  defines input file for the purposes of creating an output file in conjuction with Psfx
+
+  * match(Match)
+  if present adds match_arity(Match) into Wopts and Ropts
+
+  * output_postfix(Psfx)
+  the postfix of the output file (added at end of stem of InpFile)
+
+  * output_file(OutF)
+  defines output to csv when Any is a var/1 and Canonical is ground/1.
+
+  * report(Rep=false)
+  report the read/write and dims of corresponding matrix
+
+  * ret_mtx_input(InpF)
+  full path of the input file
+
+  * rows_name(RowsName=_)
+  if present the header is left padded with RowsName
+
+  * sep(Sep)
+  if present adds separator(SepCode) into Wopts and Ropts, via mtx_sep(Sep,SepCode), mtx_sep/2
+
+  * skip_heading(Skh=false)
+  provide prefix (number, seen as code; atom; or list, seen as codes) that removes heading lines
+
+  * type(Type)
+  returns the type of input matrix, see mtx_type/2
 ==
+
 ?- mtx( pack(mtx/data/mtcars), Cars ), 
    length( Cars, Length ).
 Cars = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, ....],
@@ -193,6 +217,7 @@ Len = 33.
 @version 1:1, 2016/11/10, added call to mtx_type/2 and predicated matrices
 @tbd  options version, with 1. read_options(ReadCsvOpts) and fill_header(true) -> with new_header(HeaderArgsList)
 (fill_header(replace) -> replaces header new_header(...)) new_header(1..n) by default.
+
 */
 mtx( File, Rows ) :-
 	mtx( File, Rows, [] ).
@@ -214,7 +239,7 @@ mtx_ground_ness( true/_, Mtx, Canon, Opts ) :- !,
 mtx_ground_ness( _/true, Mtx, Canon, _Opts ) :- !,  % passes results back to variable instead of writing
 	Mtx = Canon.
 mtx_ground_ness( _Else, Mtx, Canon, _Opts ) :- !,
-	throw( pack_error(mtx,arg_ground_at_either(1,2,Mtx,Canon)) ).
+	throw( arg_ground_in_one_of([1,2],[Mtx,Canon]), mtx:mtx/2 ).
 
 mtx_type_canonical( by_column, Mtx, Canon, _Opts ) :-
 	mtx_lists( Canon, Mtx ).
@@ -373,10 +398,47 @@ mtx_file_abs( AbsF, _File, Rows, Opts ) :-
 mtx_file_abs( AbsF, File, Rows, Opts ) :-
 	options( csv_read(CROpts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CROpts, ROpts ),
-	csv_read_file( AbsF, Rows, ROpts ),
+    options( skip_heading(Skh), Opts ),
+    mtx_csv_read_file( Skh, AbsF, Rows, ROpts ),
 	options( [report(Rep),cache(Cache)], Opts ),
 	mtx_report( Rep, read, File, Rows ),
 	mtx_data_to_store( Cache, AbsF, Rows ).
+
+mtx_csv_read_file( false, AbsF, Rows, ROpts ) :-
+    !,
+	csv_read_file( AbsF, Rows, ROpts ).
+mtx_csv_read_file( PfxPrv, AbsF, Rows, ROpts ) :-
+    ( number(PfxPrv) -> 
+        atom_codes( Pfx, [PfxPrv] )
+        ;
+        ( atom(PfxPrv) ->
+            PfxPrv = Pfx
+            ;
+            atom_codes(Pfx,PfxPrv)
+        )
+    ),
+    mtx_options_csv( [match(false)|ROpts], AbsF, TopOpts, _ ),
+    mtx_options_csv( ROpts, AbsF, CsvOpts, OpenOpts ),
+    setup_call_cleanup( 
+        open(AbsF, read, Stream, OpenOpts),
+        ( 
+            csv_read_row(Stream, Row0, TopOpts ),
+            mtx_read_headings(Row0, Pfx, Stream, Row1, TopOpts),
+            mtx_read_stream(Row1, Stream, Rows, CsvOpts)
+        ),
+            close(Stream) 
+    ).
+% mtx_csv_read_file( Skh, AbsF, Rows, ROpts ),
+
+mtx_read_headings( Row, Pfx, Stream, RowN, Topts ) :-
+    % fixme: deal with end_of_file, rows
+    arg( 1, Row, FA ),
+    atom_concat( Pfx, _, FA ),
+    !,
+    csv_read_row( Stream, Row1, Topts ),
+    mtx_read_headings( Row1, Pfx, Stream, RowN, Topts ).
+mtx_read_headings( Row, _Pfx, _Stream, Row1, _Topts ) :-
+    Row = Row1.
 
 mtx_data_to_store( false, _MtxF, _Rows ) :-
 	!.
@@ -408,6 +470,7 @@ mtx_data_from_store( Handle, _Rows ) :-
 	throw( pack_error(mtx,mtx/3,handle_inconsistency(Handle)) ).
 
 mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
+    % 19.01.30: we should probably give RoWOpts priority for match() and separator() ...
     ( memberchk(sep(MtxSep),Opts) ->
         mtx_sep( MtxSep, CsvSep ),
         SepOpts = [separator(CsvSep)|RoWOpts]
@@ -415,10 +478,12 @@ mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
         SepOpts = RoWOpts
     ),
     ( memberchk(match(Match),Opts) ->
-        CsvOpts = [match_arity(Match)|SepOpts]
+        MatOpts = [match_arity(Match)|SepOpts]
         ;
-        CsvOpts = SepOpts
-    ).
+        MatOpts = SepOpts
+    ),
+    options( convert(Conv), Opts ),
+    append( MatOpts, [convert(Conv)], CsvOpts ).
 
 mtx_report( true, Op, File, Rows ) :-
 	onoma( Op, OpOnoma ),

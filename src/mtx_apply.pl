@@ -4,9 +4,11 @@
 
 mtx_apply_defaults( Defs ) :-
 	Defs = [ij_constraint(>:<),on_mtx(self),mtx_in_goal(false),default_value(undefined),
-	        has_header(true), row_start(top) ].
+	        has_header(true), row_start(top), mod(user) ].
 
 /** mtx_apply( +Mtx, +Goal, -Res, +Opts ).
+
+Apply Goal to all non-header cells of Mtx to produce Res.
 
 Opts
   * default_value(DefV=undefined)
@@ -17,6 +19,9 @@ Opts
 
   * ij_constraint(IJc=true)
     alternatives are any operator accepted by op_compare/3 (ground Op), with < meaning operate on (strict) upper matrix and >:< operate on all pairs
+
+  * mod(Mod=user)
+    module in which to call Goal
 
   * mtx_in_goal(MinG=false)
     whether to pass scaffold to Goal call. If _true_ call is call(Gname,Scf,I,J,Elem|Gargs,NtxScf), else
@@ -63,7 +68,8 @@ mtx_apply( Mtx, Goal, Res, Args ) :-
 	mtx_dims( Body, NRs, NCs ),
 	options( row_start(Rst), Opts ),
 	mtx_apply_row_start( Rst, NRs, I, It ), 
-	mtx_apply( I, 1, It, NRs,  NCs, IJc, Body, Gn/Gas/Def, MiG, OnMtx, ResBody ),
+    options( mod(Mod), Opts ),
+	mtx_apply( I, 1, It, NRs,  NCs, IJc, Body, Mod/Gn/Gas/Def, MiG, OnMtx, ResBody ),
 	mtx_has_header_add( HasH, Header, ResBody, Res ).
 
 mtx_apply_row_start( top, NRs, 1, it(+,=<,NRs) ).
@@ -93,16 +99,16 @@ mtx_apply_row( J, I, NCs, IJc, Row, GTerm, MiG, OnMtx, ResRow ) :-
 	J =< NCs,
 	op_compare( IJc, I, J ),
 	!,
-	GTerm = Gn/Gas/_Def,
+	GTerm = Mod/Gn/Gas/_Def,
 	Row = [Elem|Tow],
-	mtx_apply_goal_term( MiG, Gn, Gas, Elem, OnMtx, I, J, ResRow, NxtMtx, RemRow ),
+	mtx_apply_goal_term( MiG, Mod, Gn, Gas, Elem, OnMtx, I, J, ResRow, NxtMtx, RemRow ),
 	Jinc is J + 1,
 	mtx_apply_row( Jinc, I, NCs, IJc, Tow, GTerm, MiG, NxtMtx, RemRow ).
 
 mtx_apply_row( J, I, NCs, IJc, Row, GTerm, MiG, OnMtx, ResRow ) :-
 	J =< NCs,
 	!,  % we are in defaults situation here
-	GTerm = _Gn/_Gas/Def,
+	GTerm = _Mod/_Gn/_Gas/Def,
 	Row = [Elem|Tow],
 	( Def=='$undefined' -> DefElem = Elem; DefElem = Def ),
 	mtx_apply_add_default( MiG, OnMtx, I, J, DefElem, ResRow, NxtMtx, RemRow ),
@@ -118,16 +124,16 @@ mtx_apply_row_pack( false, ResVals, Rn, ResRow ) :-
 mtx_apply_row_close( false, _OnMtx, [] ).
 mtx_apply_row_close( true, OnMtx, OnMtx ).
 
-mtx_apply_goal_term( false, Gn, Gas, Elem, OnMtx, _I, _J, ResRow, NxtMtx, RemRow ) :- 
+mtx_apply_goal_term( false, Mod, Gn, Gas, Elem, OnMtx, _I, _J, ResRow, NxtMtx, RemRow ) :- 
 	append( [Elem|Gas], [OutElem], Args ),
 	Call =.. [Gn|Args],
-	call( Call ),
+	call( Mod:Call ),
 	ResRow = [OutElem|RemRow], 
 	NxtMtx = OnMtx.
-mtx_apply_goal_term( true, Gn, Gas, Elem, OnMtx, I, J, ResRow, NxtMtx, RemRow ) :- 
+mtx_apply_goal_term( true, Mod, Gn, Gas, Elem, OnMtx, I, J, ResRow, NxtMtx, RemRow ) :- 
 	append( [OnMtx,I,J,Elem|Gas], NxtMtx, Args ),
 	Call =.. [Gn|Args],
-	call( Call ),
+	call( Mod:Call ),
 	RemRow = ResRow.
 
 mtx_apply_add_default( false, OnMtx, _I, _J, Val, [Val|RemRow], OnMtx, RemRow ).
