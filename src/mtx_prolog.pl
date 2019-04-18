@@ -78,14 +78,6 @@ mtx_prolog_opts( Mtx, Prolog, Opts ) :-
     ground( Prolog ),
     mtx_prolog_ground_pl( Prolog, Mtx, Opts ),
     !.
-term_in_stream(Term, In) :-
-        repeat,
-        read(In, T),
-        (   T == end_of_file
-        ->  !, fail
-        ;   T = Term
-        ).
-
 mtx_prolog_opts( Mtx, Prolog, Opts ) :-
 	mtx( Mtx, MtxRows, [ret_mtx_input(Ret)|Opts] ),
 	debug( mtx, 'Read from mtx: ~w', Ret ),
