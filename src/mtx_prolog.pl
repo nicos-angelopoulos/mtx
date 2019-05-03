@@ -68,7 +68,8 @@ Modalities
 mtx_prolog( Mtx, Prolog ) :-	
     mtx_prolog( Mtx, Prolog, [] ).
 
-mtx_prolog( Mtx, Prolog, Args ) :-
+mtx_prolog( Mtx, Prolog, ArgS ) :-
+    ( is_list(ArgS) -> ArgS = Args; Args = [ArgS] ),
 	mtx_pname_stem( Mtx, APname, _AStem ),
 	options_append( mtx_prolog, [auto_pname(APname)|Args], Opts ),
 	debug( mtx, 'mtx_prolog/3 opts: ~w', [Opts] ),
