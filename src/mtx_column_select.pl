@@ -49,7 +49,7 @@ mtx_column_select_by( @(Goal), Mtx, Out, Sel ) :-
 mtx_column_select_by( call(Goal), Mtx, Out, Sel ) :-
 	!,
 	mtx_lists( Mtx, Columns ),
-	mod_goal( user, Goal, false, Moal ),
+	mod_goal( user, Goal, Moal, override(false) ),
 	partition( Moal, Columns, SelClms, RemClms ),
 	mtx_lists( Out, RemClms ),
 	list_transpose( SelClms, Sel ).
