@@ -69,7 +69,7 @@
 
 :-  assertz(user:file_search_path(data,data)).
 
-:- ( member(Alias,[swi,app_data]),
+:- ( member(Alias,[swi,user_app_data]),
      user:file_search_path(Alias,Search), 
      directory_file_path(Search,pack,PackD),
      exists_directory(PackD),
