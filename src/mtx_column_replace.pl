@@ -70,7 +70,7 @@ mtx_column_replace_new_column_name( NewCnm, _Cnm, NewCnm ).
 
 mtx_column_replace_values( @(GoalIn), Mtx, Pos, OldVals, NewCnm, NewMtx ) :-
     !,
-    mod_goal( user, GoalIn, false, Goal ),
+    mod_goal( user, GoalIn, Goal, override(false) ),
     mtx_column( Mtx, Pos, PosOldVals ),
     maplist( Goal, PosOldVals, NewVals ),
     mtx_column_replace_values( NewVals, Mtx, Pos, OldVals, NewCnm, NewMtx ).
@@ -82,7 +82,7 @@ mtx_column_replace_values( [V|Vs], Mtx, Pos, OldVals, NewCnm, NewMtx ) :-
     NewMtx = [NewHdr|NewBody].
 mtx_column_replace_values( GoalIn, Mtx, Pos, OldVals, NewCnm, NewMtx ) :-
     compound( GoalIn ),
-    mod_goal( user, GoalIn, false, Goal ),
+    mod_goal( user, GoalIn, Goal, override(false) ),
     mtx_column( Mtx, Pos, PosOldVals ),
     call( Goal, PosOldVals, NewVals ),
     mtx_column_replace_values( NewVals, Mtx, Pos, OldVals, NewCnm, NewMtx ).
