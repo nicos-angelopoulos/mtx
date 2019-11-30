@@ -231,6 +231,8 @@ If a predicate definition has both Cnm and Cps define them in that order.
 Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 
 @author nicos angelopoulos
+@version  0.4 2019/4/22
+@version  0.3 2019/4/18
 @version  0.1 2018/4/2    first public version
 @tbd add more debug(mtx(Pred)) messages (see src/mtx.pl for a start on this)
 @see web-page: http://stoics.org.uk/~nicos/sware/mtx
@@ -307,19 +309,16 @@ The pack is distributed under the MIT license.
 
 ==
 ?- mtx_version( Ver, Date ).
-Ver = 0:1:0,
-Date = date(2018, 4, 2).
+Ver = 0:4:0,
+Date = date(2019, 4, 22).
 ==
 
-Previously: 
-==
-Ver = 0:1:0, Date = date(2018, 4, 2).
-==
-
-@version 0.2
+@author nicos angelopoulos
+@version  0.4 19.4.22
 @license MIT
 
 */
 % mtx_version( 0:1:0, date(2018,4,2) ).
 % mtx_version( 0:2:0, date(2018,6,5) ).
-mtx_version( 0:2:1, date(2018,6,5) ).
+% mtx_version( 0:3:0, date(2019,4,18) ).
+mtx_version( 0:4:0, date(2019,4,22) ).

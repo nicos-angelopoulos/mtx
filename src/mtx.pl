@@ -9,7 +9,8 @@
 %
 mtx_defaults( Defs ) :-
 	Defs = [ report(false),
-             convert(false),
+             % convert(false),
+             convert(true),
 	         csv_read([]),
 	         csv_write([]),
 		     cache(false),

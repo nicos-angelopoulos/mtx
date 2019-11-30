@@ -1,5 +1,5 @@
 
-:- lib(suggests(mlu)). % mlu_frequency_plot/2 ). % fixme: could use promised loading
+:- lib(promise(mlu_frequency_plot/2,mlu)).
 
 mtx_value_plot_defaults( [sort(true),pop_line(false)] ).
 
@@ -28,4 +28,5 @@ Opts
 mtx_value_plot( Inx, Value, Args ) :-
     mtx_value_column_frequencies( Inx, Value, CntFreqs ),
     options_append( mtx_value_plot, Args, Opts ),
-    mlu:mlu_frequency_plot( CntFreqs, Opts ).  % "mlu:" for error when pack(mlu) is not loaded/present
+    % mlu:mlu_frequency_plot( CntFreqs, Opts ).  % "mlu:" for error when pack(mlu) is not loaded/present
+    mlu_frequency_plot( CntFreqs, Opts ).  % "mlu:" for error when pack(mlu) is not loaded/present
