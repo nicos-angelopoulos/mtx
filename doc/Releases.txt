@@ -1,8 +1,9 @@
 ---   Releases   ---
 --------------------
 
-0.5
-     19.05.03   OPTS;   allow Args to be non list
+0.5         @   20.03.17
+     19.05.03   OPTS:   allow Args to be non list
+                UPDATE: work around SWI's change of aliases (user_app_data('.'))
 0.4         @   19.04.22
      19.04.22   OPTS    reverted convert(true) as default
 0.3         @   19.04.18
