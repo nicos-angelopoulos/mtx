@@ -21,32 +21,27 @@ mtx_defaults( Defs ) :-
 
 %% mtx( +Mtx ).
 %
-% SEE pack(prolog/mtx.pl)
-%
 % True iff Mtx is a valid representation of a matrix.
-% This is a synonym for mtx( Mtx, Canonical ).
-% The predicate is mostly present for documentation purposes.
-%
-% The canonical representation is a list of terms.
-%
-% Valid representations are (see mtx_type/2).
 % 
+% This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
+%
+% Valid representations are (see mtx_type/2):
 % * list of lists
-%   which is assumed to be a per-column representation (see mtx_lists/2).
+%    which is assumed to be a per-column representation (see mtx_lists/2).
 %
 % * list of terms 
-%   such as those read in with csv_read_file/2 but there is no restriction on term name and arity
-%   this is the canonical representation and each term is a row of the matrix
+%    such as those read in with csv_read_file/2 but there is no restriction on term name and arity
+%    this is the canonical representation and each term is a row of the matrix
 % 
 % * atomic
-%   where the atom corresponds to a predicate name and the predicate with arity N is defined to 
-%   succeeds with the returned argument instantiated to a list
+%    where the atom corresponds to a predicate name and the predicate with arity N is defined to 
+%    succeeds with the returned argument instantiated to a list
 % 
 % * csv file or its stem
-%   as possible to be read by csv_read_file/2
-%	alias paths and normal delimited file extension can be ommited
+%    as possible to be read by csv_read_file/2
+%	 alias paths and normal delimited file extension can be ommited
 %
-% + Notes for developers.
+%---+++ Notes for developers.
 %
 % For examples use:
 %== 
@@ -58,7 +53,7 @@ mtx_defaults( Defs ) :-
 % ?- mtx( data(mtcars), Mtx ).
 %==
 %
-% Variable naming conventions
+%---++ Variable naming conventions
 % * MtxIn  
 %   matrix in any acceptable representation (1st arg of mtx/2)
 % * Mtx    
@@ -77,6 +72,9 @@ mtx_defaults( Defs ) :-
 %==
 % ?- mtx_data( mtcars, Cars ), mtx( Cars ).
 %==
+%
+%@see library(mtx)
+%
 mtx( Mtx ) :-
 	mtx( Mtx, _ ).
 
@@ -90,12 +88,13 @@ The canonical representation of a matrix is a list of compounds, the first
 of which is the header and the rest are the rows. The term name of the compounds is not strict but header
 is often and by convention either _hdr_ or _row_ and rows are usually term named by _row_. 
 
-When Opts is missing it is set to the empty list (see options/2).
+When Opts is missing, it is set to the empty list (see options/2).
+
+See library(mtx).
 
 Modes
 
-When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats
-(see mtx_type/2).
+When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats (see mtx_type/2).
 
 When both +Canonical and +Res are ground, Res is taken to be a file to write on.
 
@@ -216,8 +215,10 @@ Len = 33.
 
 @version 1:0, 2014/9/22 
 @version 1:1, 2016/11/10, added call to mtx_type/2 and predicated matrices
-@tbd  options version, with 1. read_options(ReadCsvOpts) and fill_header(true) -> with new_header(HeaderArgsList)
-(fill_header(replace) -> replaces header new_header(...)) new_header(1..n) by default.
+@tbd option read_options(ReadCsvOpts)
+@tbd option fill_header(true) then with new_header(HeaderArgsList)
+@tbd fill_header(replace) then, replaces header new_header(...) new_header(1..n) by default.
+@see library(mtx)
 
 */
 mtx( File, Rows ) :-

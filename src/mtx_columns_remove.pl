@@ -1,10 +1,11 @@
 
-:- lib( options ).
+:- lib(options).
 
-/** mtx_columns_remove( +Mtx, +CidsOrGoal, -Out, +Opts )
+/** mtx_columns_remove( +Mtx, +CidsOrGoal, -Out )
 
 Remove a number of columns from Mtx resulting to Out.
 
+CidsOrGoal should be either be a Cid, a list of Cids or a Goal.
 
 ==
 ?- mtx_data( mtcars, Mt ), mtx_columns_remove( Mt, [wt,cyl], Red ).

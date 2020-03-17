@@ -1,37 +1,42 @@
 :- module( mtx,  [
-				mtx/1, mtx/2, mtx/3,
-				mtx_facts/1,mtx_facts/2,mtx_facts/3,
-				mtx_header/2, mtx_header_body/3,  mtx_header_body/5,
-				mtx_has_header_add/4,
-				mtx_header_column_name_pos/4, mtx_header_column_pos/3,
-				mtx_header_column_multi_pos/4, mtx_relative_pos/4,
-				mtx_header_cids_order/3,
-				mtx_name_prefix_column/5,
+                mtx/1,
+                mtx/2,
+                mtx/3,
 
-				mtx_lists/2,
-				mtx_facts_remove/1,  % ?
-				mtx_in_memory/1, mtx_in_memory/2, mtx_matrices_in_memory/1,
+                mtx_facts/1, mtx_facts/2, mtx_facts/3,  % +CsvF[, ?Module[, +Opts]]
+                mtx_facts_remove/1,                     % 
 
-				mtx_column/3, mtx_column/5, mtx_column_default/4, 
-				mtx_column_set/3, mtx_column_set/4,
-				mtx_column_name_options/5, mtx_column_name_options/3,
+
+                mtx_header/2, mtx_header_body/3,  mtx_header_body/5,
+                mtx_has_header_add/4,
+                mtx_header_column_name_pos/4, mtx_header_column_pos/3,
+                mtx_header_column_multi_pos/4, mtx_relative_pos/4,
+                mtx_header_cids_order/3,
+                mtx_name_prefix_column/5,
+
+                mtx_lists/2,
+                mtx_in_memory/1, mtx_in_memory/2, mtx_matrices_in_memory/1,
+
+                mtx_column/3, mtx_column/5, mtx_column_default/4, 
+                mtx_column_set/3, mtx_column_set/4,
+                mtx_column_name_options/5, mtx_column_name_options/3,
                 mtx_options_select/4, mtx_options_select/5,
-				mtx_column_select/4, 
-				mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_columns_kv/6,
-				mtx_column_add/4,
-				mtx_column_replace/5, mtx_column_replace/6,
-				mtx_column_threshold/5, mtx_column_threshold/6, 
+                mtx_column_select/4, 
+                mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_columns_kv/6,
+                mtx_column_add/4,
+                mtx_column_replace/5, mtx_column_replace/6,
+                mtx_column_threshold/5, mtx_column_threshold/6, 
                 mtx_column_frequency_threshold/5,
-				mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
-				mtx_column_values_select/6,
+                mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
+                mtx_column_values_select/6,
                 mtx_column_join/5, % +MtxBase, +Column, +MtxExt, -MtxOut, +Opts
-				mtx_columns_copy/4,
-				mtx_columns_partition/4,
-				mtx_columns_partition/5,
-				mtx_row_apply/4,
-				mtx_rows_partition/5,
-				mtx_columns_remove/3,
-				mtx_columns_values/3,
+                mtx_columns_copy/4,
+                mtx_columns_partition/4,
+                mtx_columns_partition/5,
+                mtx_row_apply/4,
+                mtx_rows_partition/5,
+                mtx_columns_remove/3,
+                mtx_columns_values/3,
                 mtx_value_plot/3,
                 mtx_value_column_frequencies/3,
                 mtx_columns_collapse/6, % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
@@ -39,24 +44,24 @@
                 mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
                 mtx_read_stream/3, 
                 mtx_read_stream/4,  % +Row0, +Stream, -Data, +CsvOpts
-				mtx_pos_elem/5, mtx_pos_elem/6,
-				mtx_apply/4,
-				mtx_data/2, mtx_dims/3,
-				mtx_factors/3, mtx_transpose/2,
-				mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
-				mtx_sort/3, mtx_sort/4, mtx_type/2,
+                mtx_pos_elem/5, mtx_pos_elem/6,
+                mtx_apply/4,
+                mtx_data/2, mtx_dims/3,
+                mtx_factors/3, mtx_transpose/2,
+                mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
+                mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
                 mtx_column_subsets/3,
                 mtx_version/2
-			  ]
-		).
+              ]
+        ).
 
 
 :- use_module(library(lib)).
 :- lib( source(mtx), homonyms(true) ).
 
-:- lib(debug).  	% this is auto-load, keeping here to encourage usage. 
+:- lib(debug).      % this is auto-load, keeping here to encourage usage. 
                     % src/mtx.pl has started using debug/3. use mtx(Pname), also move to pack(debug_call)
 
 :- lib(os_lib).
@@ -67,25 +72,8 @@
 :- dynamic( mtx:mtx_data_store/2 ).
 :- dynamic( mtx:mtx_data_handle_file/2 ).
 
-:-  assertz(user:file_search_path(data,data)).
-
-:- ( member(Alias,[swi,user_app_data]),
-     user:file_search_path(Alias,Search), 
-     directory_file_path(Search,pack,PackD),
-     exists_directory(PackD),
-     directory_files(PackD,Files),
-     member(Dir,Files),
-     Dir \== '.', Dir \=='..',
-     directory_file_path(PackD,Dir,AbsDir),
-     directory_file_path(AbsDir,data,DataD),
-     exists_directory(DataD),
-     debug( upsh,'assert-zing:~w',[user:file_search_path(upsh,DataD)] ),
-     assertz(user:file_search_path(data,DataD)),
-    fail
-   ;
-   true
-   ).
-
+:- lib(alias_data/0).
+:- alias_data.
 
 :- lib(mtx/1).
 :- lib(mtx_column_kv/3).
@@ -259,7 +247,7 @@ Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 %==
 %
 mtx_data( mtcars, Mtcars ) :-
-	mtx( pack(mtx/data/mtcars), Mtcars ).
+    mtx( pack(mtx/data/mtcars), Mtcars ).
 
 /** mtx_sep_type(+SepType).
 

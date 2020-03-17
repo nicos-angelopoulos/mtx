@@ -1,11 +1,25 @@
 ---   Releases   ---
 --------------------
 
+0.6
+     20.03.17   DOC:    doc comments were still on csv_transpose/2
+                DOC:    remove spurious Opts from doc of mtx_columns_remove/3
+                DOC:    mtx_facts/2 fixed formating
+                DOC:    added Arg comments to module pred definition
+                RETAB:  not all files
+                LIB:    alias_data/0
+                DEBUG:  mtx_facts -> mtx(facts)
+                IFACE:  mtx_facts/3's first argument can now take (data) aliases 
+                DOC:    proper example in  mtx_facts/2
+                EG:     added examples/facts.pl
+
 0.5         @   20.03.17
      19.05.03   OPTS:   allow Args to be non list
                 UPDATE: work around SWI's change of aliases (user_app_data('.'))
+
 0.4         @   19.04.22
      19.04.22   OPTS    reverted convert(true) as default
+
 0.3         @   19.04.18
      19.02.26   OPTS:   new value first for is_unique(IsUnique)
                 FIXED:  do not consume matching lines if we are in non exhaustive join (is_exhaustive(false))
