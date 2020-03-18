@@ -8,16 +8,16 @@
 % This is also called from mtx_options_select/5. Be mindfull if it is being changed.
 %
 mtx_defaults( Defs ) :-
-	Defs = [ report(false),
+    Defs = [ report(false),
              % convert(false),
              convert(true),
-	         csv_read([]),
-	         csv_write([]),
-		     cache(false),
-		     from_cache(true),
+             csv_read([]),
+             csv_write([]),
+             cache(false),
+             from_cache(true),
              skip_heading(false)
             % sep(0',)  % has no default value
-	       ].
+           ].
 
 %% mtx( +Mtx ).
 %
@@ -26,22 +26,20 @@ mtx_defaults( Defs ) :-
 % This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
 %
 % Valid representations are (see mtx_type/2):
-% * list of lists
-%    which is assumed to be a per-column representation (see mtx_lists/2).
 %
-% * list of terms 
-%    such as those read in with csv_read_file/2 but there is no restriction on term name and arity
-%    this is the canonical representation and each term is a row of the matrix
-% 
-% * atomic
-%    where the atom corresponds to a predicate name and the predicate with arity N is defined to 
-%    succeeds with the returned argument instantiated to a list
-% 
-% * csv file or its stem
-%    as possible to be read by csv_read_file/2
-%	 alias paths and normal delimited file extension can be ommited
+%  * list_of_lists
+%   which is assumed to be a per-column representation (see mtx_lists/2).
 %
-%---+++ Notes for developers.
+%  * list_of_terms 
+%   such as those read in with csv_read_file/2 but there is no restriction on term name and arity this is the canonical representation and each term is a row of the matrix
+%
+%  * atomic
+%   where the atom corresponds to a predicate name and the predicate with arity N is defined to succeeds with the returned argument instantiated to a list
+% 
+%  * csv_file_or_its_stem
+%   as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
+%
+%Notes for developers.
 %
 % For examples use:
 %== 
@@ -76,7 +74,7 @@ mtx_defaults( Defs ) :-
 %@see library(mtx)
 %
 mtx( Mtx ) :-
-	mtx( Mtx, _ ).
+    mtx( Mtx, _ ).
 
 /** mtx( +Any, -Canonical ).
     mtx( ?Res, +Canonical ).
@@ -222,193 +220,193 @@ Len = 33.
 
 */
 mtx( File, Rows ) :-
-	mtx( File, Rows, [] ).
+    mtx( File, Rows, [] ).
 
 mtx( Mtx, Rows, Args ) :-
-	options_append( mtx, Args, Opts ),
-	ground( Mtx, GrMtx  ),   % fixme: now these can return partial- unlike old is_ground/2
-	ground( Rows, GrRows ),
-	mtx_ground_ness( GrMtx/GrRows, Mtx, Rows, Opts ).
+    options_append( mtx, Args, Opts ),
+    ground( Mtx, GrMtx  ),   % fixme: now these can return partial- unlike old is_ground/2
+    ground( Rows, GrRows ),
+    mtx_ground_ness( GrMtx/GrRows, Mtx, Rows, Opts ).
 
 mtx_ground_ness( true/true, Mtx, Canon, Opts ) :- !,
-	mtx_ground_canonical( Mtx, Canon, Opts ).
+    mtx_ground_canonical( Mtx, Canon, Opts ).
 mtx_ground_ness( true/_, Mtx, Canon, Opts ) :- !,
-	% mtx_canonical( Mtx, Canon, Opts ),
-	mtx_type( Mtx, Type ),
-	ground( Type ),
-	options_return( type(Type), Opts ),
-	mtx_type_canonical( Type, Mtx, Canon, Opts ).
+    % mtx_canonical( Mtx, Canon, Opts ),
+    mtx_type( Mtx, Type ),
+    ground( Type ),
+    options_return( type(Type), Opts ),
+    mtx_type_canonical( Type, Mtx, Canon, Opts ).
 mtx_ground_ness( _/true, Mtx, Canon, _Opts ) :- !,  % passes results back to variable instead of writing
-	Mtx = Canon.
+    Mtx = Canon.
 mtx_ground_ness( _Else, Mtx, Canon, _Opts ) :- !,
-	throw( arg_ground_in_one_of([1,2],[Mtx,Canon]), mtx:mtx/2 ).
+    throw( arg_ground_in_one_of([1,2],[Mtx,Canon]), mtx:mtx/2 ).
 
 mtx_type_canonical( by_column, Mtx, Canon, _Opts ) :-
-	mtx_lists( Canon, Mtx ).
+    mtx_lists( Canon, Mtx ).
 mtx_type_canonical( by_row, Canon, Canon, _Opts ).
 mtx_type_canonical( handled, Handle, Canon, Opts ) :-
-	mtx_from_file( Handle, Canon, Opts ).
+    mtx_from_file( Handle, Canon, Opts ).
 mtx_type_canonical( on_file(File), _Mtx, Canon, Opts ) :-
-	mtx_from_file( File, Canon, Opts ),
-	options_return( ret_mtx_input(File), Opts ).
+    mtx_from_file( File, Canon, Opts ),
+    options_return( ret_mtx_input(File), Opts ).
 mtx_type_canonical( predicated, Pname/Arity, Canon, _Opts ) :-
-	% Goal =.. [Pname,Arg],
-	member( Mod, [user,mtx] ),
-	functor( Goal, Pname, Arity ),
-	predicate_property( Mod:Goal, defined ),
-	!,
-	Goal =.. [Pname|Args],
-	Row =.. [row|Args],
-	findall( Row, call(Mod:Goal), Canon ).
+    % Goal =.. [Pname,Arg],
+    member( Mod, [user,mtx] ),
+    functor( Goal, Pname, Arity ),
+    predicate_property( Mod:Goal, defined ),
+    !,
+    Goal =.. [Pname|Args],
+    Row =.. [row|Args],
+    findall( Row, call(Mod:Goal), Canon ).
 mtx_type_canonical( asserted, Pname, Canon, _Opts ) :-
-	member( Mod, [user,mtx] ),
-	Goal =.. [Pname,Canon],
-	predicate_property( Mod:Goal, defined ),
-	!,
-	once( call(Mod:Goal) ).
-	
+    member( Mod, [user,mtx] ),
+    Goal =.. [Pname,Canon],
+    predicate_property( Mod:Goal, defined ),
+    !,
+    once( call(Mod:Goal) ).
+    
 mtx_type_canonical( predfile, Pname, Canon, Opts ) :-
-	member( Mod, [user,mtx] ),
-	Goal =.. [Pname,File],
-	predicate_property( Mod:Goal, defined ),
-	call( Mod:Goal ),
-	!,
-	mtx_from_file( File, Canon, Opts ),
-	options_return( ret_mtx_input(File), Opts ).
+    member( Mod, [user,mtx] ),
+    Goal =.. [Pname,File],
+    predicate_property( Mod:Goal, defined ),
+    call( Mod:Goal ),
+    !,
+    mtx_from_file( File, Canon, Opts ),
+    options_return( ret_mtx_input(File), Opts ).
 
 mtx_ground_canonical( Mtx, Canon, Opts ) :-
-	holds( (mtx:mtx_type(Canon,Type),Type == by_row), ByRow ),
-	mtx_ground_canonical_type( ByRow, Type, Mtx, Canon, Opts ).
+    holds( (mtx:mtx_type(Canon,Type),Type == by_row), ByRow ),
+    mtx_ground_canonical_type( ByRow, Type, Mtx, Canon, Opts ).
 
 mtx_ground_canonical_type( true, _Type, Mtx, Canon, Opts ) :-
-	mtx_to_file( Canon, Mtx, Opts ).
+    mtx_to_file( Canon, Mtx, Opts ).
 mtx_ground_canonical_type( false, Type, _Mtx, _Canon, _Opts ) :-
-	throw( pack_error(mtx,mtx/3,non_canonical(Type)) ).
+    throw( pack_error(mtx,mtx/3,non_canonical(Type)) ).
 
 /*
 mtx( File, Rows, Args ) :-
-	options_append( mtx, Args, Opts ),
-	maplist( is_ground, [File,Rows], [FileG,RowsG] ),
-	( (FileG==true,atomic(File)) -> FileA = true, VarA =false 
-	      ; (var(FileG) -> VarA = true; VarA=false), FileA = false ),
-	mtx( VarA/FileG/FileA/RowsG, File, Rows, Opts ).
+    options_append( mtx, Args, Opts ),
+    maplist( is_ground, [File,Rows], [FileG,RowsG] ),
+    ( (FileG==true,atomic(File)) -> FileA = true, VarA =false 
+          ; (var(FileG) -> VarA = true; VarA=false), FileA = false ),
+    mtx( VarA/FileG/FileA/RowsG, File, Rows, Opts ).
 
 mtx( Instance, File, Rows, Opts ) :-
-	mtx_decipher( Instance, File, Rows, Opts ),
-	!.
+    mtx_decipher( Instance, File, Rows, Opts ),
+    !.
 mtx( Instance, Spec, _Rows, Opts ) :-
-	throw( pack_error(mtx,mtx/3,unknown_mtx_input(Spec,Instance,Opts)) ). 
-	% fixme: use proper error handling
+    throw( pack_error(mtx,mtx/3,unknown_mtx_input(Spec,Instance,Opts)) ). 
+    % fixme: use proper error handling
 */
 
 /*
 mtx( File, Rows, OptS ) :-
-	atomic( File ),
-	\+ ground( Rows ),
-	!,
-	*/
+    atomic( File ),
+    \+ ground( Rows ),
+    !,
+    */
 % mtx_decipher( IsAvar/IsAground/IsAatom/IsBground, File, Rows, Opts ) :-
 /*
 mtx_decipher( false/true/true/false, File, Rows, Opts ) :-
-	file_mtx( File, Rows, Opts ),
-	ret_option( ret_mtx_input(File), Opts ).
+    file_mtx( File, Rows, Opts ),
+    ret_option( ret_mtx_input(File), Opts ).
 mtx_decipher( false/false/false/true, Mtx, Rows, _Opts ) :-
-	Rows = Mtx.
+    Rows = Mtx.
 mtx_decipher( false/true/false/false, Mtx, Rows, Opts ) :-
-	( Mtx= [_|_] ->
-		Rows = Mtx
-		;
-		file_mtx( Mtx, Rows, Opts ),
-		ret_option( ret_mtx_input(Mtx), Opts )
-	).
+    ( Mtx= [_|_] ->
+        Rows = Mtx
+        ;
+        file_mtx( Mtx, Rows, Opts ),
+        ret_option( ret_mtx_input(Mtx), Opts )
+    ).
 mtx_decipher( true/false/false/false, Path, Rows, Opts ) :-
-	once( locate(Path,['',csv,tsv],File) ),
-	options( csv_read(ROpts), Opts, en_list(true) ),
-	csv_read_file( File, Rows, ROpts ),
-	options( report(Rep), Opts ),
-	mtx_report( Rep, read, File, Rows ),
-	ret_option( ret_mtx_input(File), Opts ).
+    once( locate(Path,['',csv,tsv],File) ),
+    options( csv_read(ROpts), Opts, en_list(true) ),
+    csv_read_file( File, Rows, ROpts ),
+    options( report(Rep), Opts ),
+    mtx_report( Rep, read, File, Rows ),
+    ret_option( ret_mtx_input(File), Opts ).
 % mtx( File, Rows, Opts ) :-
-	% var( File ),
-	% ground( Rows ),
+    % var( File ),
+    % ground( Rows ),
 mtx_decipher( true/false/false/true, File, Rows, Opts ) :-
-	mtx_file( Rows, File, Opts ),
-	ret_option( ret_mtx_input(File), Opts ).
+    mtx_file( Rows, File, Opts ),
+    ret_option( ret_mtx_input(File), Opts ).
 % mtx( Spec, Rows, OptS ) :-
-% 	ground( Spec ),
-%	ground( Rows ),
+%   ground( Spec ),
+%   ground( Rows ),
 mtx_decipher( false/true/false/true, Spec, Rows, Opts ) :-
-	mtx_to_file( Rows, Spec, Opts ).
+    mtx_to_file( Rows, Spec, Opts ).
 mtx_decipher( false/true/true/true, Spec, Rows, Opts ) :-
-	mtx_to_file( Rows, Spec, Opts ).
+    mtx_to_file( Rows, Spec, Opts ).
 */
 
 mtx_file( Rows, OutputF, Opts ) :-   % fixme: document these 2 clauses
-	memberchk( input_file(Input), Opts ),
-	memberchk( output_postfix(Psfx),Opts ),
-	!,
-	file_name_extension( Stem, Ext, Input ),
-	atom_concat( Stem, Psfx, NewStem ),
-	file_name_extension( NewStem, Ext, OutputF ),
-	options( csv_write(CWopts), Opts, en_list(true) ),
+    memberchk( input_file(Input), Opts ),
+    memberchk( output_postfix(Psfx),Opts ),
+    !,
+    file_name_extension( Stem, Ext, Input ),
+    atom_concat( Stem, Psfx, NewStem ),
+    file_name_extension( NewStem, Ext, OutputF ),
+    options( csv_write(CWopts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CWopts, Wopts ),
-	csv_write_file( OutputF, Rows, Wopts ).
+    csv_write_file( OutputF, Rows, Wopts ).
 mtx_file( Rows, OutputF, Opts ) :-
-	memberchk( output_file(OutputF), Opts ),
-	!,
-	options( csv_write(CWopts), Opts, en_list(true) ),
+    memberchk( output_file(OutputF), Opts ),
+    !,
+    options( csv_write(CWopts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CWopts, Wopts ),
-	csv_write_file( OutputF, Rows, Wopts ).
+    csv_write_file( OutputF, Rows, Wopts ).
 mtx_file( Rows, File, _Opts ) :-
-	File = Rows.
+    File = Rows.
 
 mtx_to_file( Rows, Spec, Opts ) :-
-	expand_spec( Spec, File ),
-	options( csv_write(CWOpts), Opts, en_list(true) ),
+    expand_spec( Spec, File ),
+    options( csv_write(CWOpts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CWOpts, WOpts ),
-	csv_write_file( File, Rows, WOpts ),
-	options( report(Rep), Opts ),
-	mtx_report( Rep, wrote, File, Rows ),
-	options_return( ret_mtx_input(File), Opts ).
+    csv_write_file( File, Rows, WOpts ),
+    options( report(Rep), Opts ),
+    mtx_report( Rep, wrote, File, Rows ),
+    options_return( ret_mtx_input(File), Opts ).
 % mtx( Spec, Rows, Opts ) :-
 
 mtx_from_file( Handle, Rows, Opts ) :-
-	\+ options(from_cache(false),Opts),
-	mtx:mtx_data_handle_file( Handle, _ ),
-	!,
-	debug( mtx(mtx), 'Using cached mtx with handle: ~w', Handle ),
-	mtx_data_from_store( Handle, Rows ).
+    \+ options(from_cache(false),Opts),
+    mtx:mtx_data_handle_file( Handle, _ ),
+    !,
+    debug( mtx(mtx), 'Using cached mtx with handle: ~w', Handle ),
+    mtx_data_from_store( Handle, Rows ).
 mtx_from_file( File, Rows, Opts ) :-
-	os_term( Filb, File ),
-	once( locate(Filb,['',csv,tsv],Fila) ),
-	% exists_file( Fila ),
-	!,
-	mtx_file_abs( Fila, File, Rows, Opts ).
+    os_term( Filb, File ),
+    once( locate(Filb,['',csv,tsv],Fila) ),
+    % exists_file( Fila ),
+    !,
+    mtx_file_abs( Fila, File, Rows, Opts ).
 mtx_from_file( File, Rows, Opts ) :-
-	( file_name_extension(File,csv,MtxF); file_name_extension(File,tsv,MtxF)),
-	exists_file( MtxF ),
-	!,
-	mtx_file_abs( MtxF, File, Rows, Opts ).
+    ( file_name_extension(File,csv,MtxF); file_name_extension(File,tsv,MtxF)),
+    exists_file( MtxF ),
+    !,
+    mtx_file_abs( MtxF, File, Rows, Opts ).
 mtx_from_file( File, Rows, Opts ) :-     % for the error message
-	csv_read_file( File, Rows, Opts ).
+    csv_read_file( File, Rows, Opts ).
 
 mtx_file_abs( AbsF, _File, Rows, Opts ) :-
-	\+ options(from_cache(false),Opts),
-	mtx_data_store( AbsF, Rows ),
-	!,
-	debug( mtx(mtx), 'Using cached mtx with file location: ~p', AbsF ).
+    \+ options(from_cache(false),Opts),
+    mtx_data_store( AbsF, Rows ),
+    !,
+    debug( mtx(mtx), 'Using cached mtx with file location: ~p', AbsF ).
 mtx_file_abs( AbsF, File, Rows, Opts ) :-
-	options( csv_read(CROpts), Opts, en_list(true) ),
+    options( csv_read(CROpts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CROpts, ROpts ),
     options( skip_heading(Skh), Opts ),
     mtx_csv_read_file( Skh, AbsF, Rows, ROpts ),
-	options( [report(Rep),cache(Cache)], Opts ),
-	mtx_report( Rep, read, File, Rows ),
-	mtx_data_to_store( Cache, AbsF, Rows ).
+    options( [report(Rep),cache(Cache)], Opts ),
+    mtx_report( Rep, read, File, Rows ),
+    mtx_data_to_store( Cache, AbsF, Rows ).
 
 mtx_csv_read_file( false, AbsF, Rows, ROpts ) :-
     !,
-	csv_read_file( AbsF, Rows, ROpts ).
+    csv_read_file( AbsF, Rows, ROpts ).
 mtx_csv_read_file( PfxPrv, AbsF, Rows, ROpts ) :-
     ( number(PfxPrv) -> 
         atom_codes( Pfx, [PfxPrv] )
@@ -443,33 +441,33 @@ mtx_read_headings( Row, _Pfx, _Stream, Row1, _Topts ) :-
     Row = Row1.
 
 mtx_data_to_store( false, _MtxF, _Rows ) :-
-	!.
+    !.
 mtx_data_to_store( true, MtxF, Rows ) :-
-	once( absolute_file_name(MtxF,AbsF) ),
-	% fixme: need to do more checks ?
-	retractall(mtx:mtx_data_store(AbsF,_)),
-	assert(mtx:mtx_data_store(AbsF,Rows)).
+    once( absolute_file_name(MtxF,AbsF) ),
+    % fixme: need to do more checks ?
+    retractall(mtx:mtx_data_store(AbsF,_)),
+    assert(mtx:mtx_data_store(AbsF,Rows)).
 mtx_data_to_store( Handle, MtxF, Rows ) :-
-	once( absolute_file_name(MtxF,AbsF) ),
-	mtx_data_handle_to_file( Handle, AbsF ),
-	retractall(mtx:mtx_data_store(Handle,_)),
-	assert(mtx:mtx_data_store(Handle,Rows)),
-	assert(mtx:mtx_data_store(AbsF,Rows)).
+    once( absolute_file_name(MtxF,AbsF) ),
+    mtx_data_handle_to_file( Handle, AbsF ),
+    retractall(mtx:mtx_data_store(Handle,_)),
+    assert(mtx:mtx_data_store(Handle,Rows)),
+    assert(mtx:mtx_data_store(AbsF,Rows)).
 
 mtx_data_handle_to_file( Handle, AbsF ) :-
-	mtx_data_handle_file( Handle, OthF ),
-	OthF \== AbsF,
-	!,
-	throw( pack_error(mtx,mtx/3,handle_exists(Handle,OthF,AbsF)) ).
+    mtx_data_handle_file( Handle, OthF ),
+    OthF \== AbsF,
+    !,
+    throw( pack_error(mtx,mtx/3,handle_exists(Handle,OthF,AbsF)) ).
 mtx_data_handle_to_file( Handle, AbsF ) :-
-	retractall( mtx:mtx_data_handle_file(Handle,_) ),  % bit lazy
-	assert( mtx:mtx_data_handle_file(Handle,AbsF) ).
+    retractall( mtx:mtx_data_handle_file(Handle,_) ),  % bit lazy
+    assert( mtx:mtx_data_handle_file(Handle,AbsF) ).
 
 mtx_data_from_store( Handle, Rows ) :-
-	mtx_data_store( Handle, Rows ),
-	!.
+    mtx_data_store( Handle, Rows ),
+    !.
 mtx_data_from_store( Handle, _Rows ) :-
-	throw( pack_error(mtx,mtx/3,handle_inconsistency(Handle)) ).
+    throw( pack_error(mtx,mtx/3,handle_inconsistency(Handle)) ).
 
 mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
     % 19.01.30: we should probably give RoWOpts priority for match() and separator() ...
@@ -488,7 +486,7 @@ mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
     append( MatOpts, [convert(Conv)], CsvOpts ).
 
 mtx_report( true, Op, File, Rows ) :-
-	onoma( Op, OpOnoma ),
-	mtx_rows_dims( Rows, Nrows, Ncols ),
-	format( '~a file: ~w with ~d rows and ~d columns \n', [OpOnoma,File,Nrows,Ncols] ).
+    onoma( Op, OpOnoma ),
+    mtx_rows_dims( Rows, Nrows, Ncols ),
+    format( '~a file: ~w with ~d rows and ~d columns \n', [OpOnoma,File,Nrows,Ncols] ).
 mtx_report( false, _Op, _File, _Rows ).
