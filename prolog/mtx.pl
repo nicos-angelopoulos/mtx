@@ -1,22 +1,14 @@
 :- module( mtx,  [
-                mtx/1,
-                mtx/2,
-                mtx/3,
-
-                mtx_facts/1, mtx_facts/2, mtx_facts/3,  % +CsvF[, ?Module[, +Opts]]
-                mtx_facts_remove/1,                     % 
-
-
+                mtx/1, mtx/2, mtx/3 % +Mtx,[?Canonical,[+Opts
+                mtx_data/2, mtx_dims/3,
+                %
+                mtx_lists/2,
                 mtx_header/2, mtx_header_body/3,  mtx_header_body/5,
                 mtx_has_header_add/4,
                 mtx_header_column_name_pos/4, mtx_header_column_pos/3,
                 mtx_header_column_multi_pos/4, mtx_relative_pos/4,
                 mtx_header_cids_order/3,
                 mtx_name_prefix_column/5,
-
-                mtx_lists/2,
-                mtx_in_memory/1, mtx_in_memory/2, mtx_matrices_in_memory/1,
-
                 mtx_column/3, mtx_column/5, mtx_column_default/4, 
                 mtx_column_set/3, mtx_column_set/4,
                 mtx_column_name_options/5, mtx_column_name_options/3,
@@ -27,13 +19,11 @@
                 mtx_column_replace/5, mtx_column_replace/6,
                 mtx_column_threshold/5, mtx_column_threshold/6, 
                 mtx_column_frequency_threshold/5,
-                mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl[, +Opts]
+                mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl,[+Opts]
                 mtx_column_values_select/6,
                 mtx_column_join/5, % +MtxBase, +Column, +MtxExt, -MtxOut, +Opts
                 mtx_columns_copy/4,
-                mtx_columns_partition/4,
-                mtx_columns_partition/5,
-                mtx_row_apply/4,
+                mtx_columns_partition/4, mtx_columns_partition/5,
                 mtx_rows_partition/5,
                 mtx_columns_remove/3,
                 mtx_columns_values/3,
@@ -41,18 +31,24 @@
                 mtx_value_column_frequencies/3,
                 mtx_columns_collapse/6, % +MtxIn, +Cids, +Cnm, +RowGoal, +Pos, -Mtx
                 mtx_columns_cross_table/5,
-                mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
-                mtx_read_stream/3, 
-                mtx_read_stream/4,  % +Row0, +Stream, -Data, +CsvOpts
                 mtx_pos_elem/5, mtx_pos_elem/6,
                 mtx_apply/4,
-                mtx_data/2, mtx_dims/3,
+                mtx_row_apply/4,
                 mtx_factors/3, mtx_transpose/2,
                 mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
                 mtx_sort/3, mtx_sort/4, mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
                 mtx_column_subsets/3,
+                %
+                mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
+                mtx_read_stream/3, mtx_read_stream/4,  % [+Row0], +Stream, -Data, +CsvOpts
+                %
+                mtx_facts/1, mtx_facts/2, mtx_facts/3,  % +CsvF,[?Module,[+Opts]]
+                mtx_facts_remove/1,                     % 
+                mtx_in_memory/1, mtx_in_memory/2, 
+                mtx_matrices_in_memory/1,
+                %
                 mtx_version/2
               ]
         ).
@@ -84,6 +80,7 @@
 :- lib(mtx_header_column_pos/3).
 :- lib(mtx_header_column_multi_pos/4).
 :- lib(mtx_in_memory/2).
+:- lib(mtx_matrices_in_memory/1).
 :- lib(mtx_sort/3).
 :- lib(mtx_facts/3).
 :- lib(mtx_column_add/4).
@@ -185,7 +182,7 @@ Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
 
 ---+ Good places to start:
 
-  * mtx/3
+  * mtx/1,mtx/2,mtx/3
   * mtx_column/3
   * mtx_column_select/4
   * mtx_column_add/4
@@ -197,6 +194,7 @@ Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
   * mtx_columns_cross_table/5
   * mtx_apply/4
   * mtx_lists/2
+  * mtx_facts/3
 
 ---+ Notes for developers
 
@@ -299,11 +297,11 @@ The pack is distributed under the MIT license.
 ==
 ?- mtx_version( Ver, Date ).
 Ver = 0:5:0,
-Date = date(2019, 3, 22).
+Date = date(2020, 3, 18).
 ==
 
 @author nicos angelopoulos
-@version  0.5 20.3.17
+@version  0.5 2020/3/18
 @license MIT
 
 */
@@ -311,4 +309,4 @@ Date = date(2019, 3, 22).
 % mtx_version( 0:2:0, date(2018,6,5) ).
 % mtx_version( 0:3:0, date(2019,4,18) ).
 % mtx_version( 0:4:0, date(2019,4,22) ).
-mtx_version( 0:5:0, date(2020,3,17) ).
+mtx_version( 0:5:0, date(2020,3,18) ).

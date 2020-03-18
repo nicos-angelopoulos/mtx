@@ -1,7 +1,13 @@
 %% mtx_matrices_in_memory( +Mtcs ).
 % 
 % Mtcs is the list of matrices currently loaded in memory in the form of Module-AbsF.
-% Each matrix is loaded in a separate module (see mtx_memory/2).
+% Each matrix is loaded in a separate module (see mtx_in_memory/2).
+%
+%==
+% ?- mtx_facts( data('mtcars.csv'), Mtcars ).
+% ?- mtx_matrices_in_memory( Mtcs ).
+% Mtcs = [mtcars-'/home/nicos/.local/share/swi-prolog/pack/mtx/data/mtcars.csv'].
+%==
 %
 % @author nicos angelopoulos
 % @version  2.1  2014/02/09.
