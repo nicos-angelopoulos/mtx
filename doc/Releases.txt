@@ -1,6 +1,9 @@
 ---   Releases   ---
 --------------------
 
+0.6
+     20.03.18   EG:     debug matrices in memory.
+
 0.5          @  20.03.18 
      20.03.17   DOC:    doc comments were still on csv_transpose/2
                 DOC:    remove spurious Opts from doc of mtx_columns_remove/3
