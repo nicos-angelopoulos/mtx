@@ -1,5 +1,5 @@
 :- module( mtx,  [
-                mtx/1, mtx/2, mtx/3 % +Mtx,[?Canonical,[+Opts
+                mtx/1, mtx/2, mtx/3, % +Mtx,[?Canonical,[+Opts
                 mtx_data/2, mtx_dims/3,
                 %
                 mtx_lists/2,
