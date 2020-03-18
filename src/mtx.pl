@@ -39,7 +39,7 @@ mtx_defaults( Defs ) :-
 %  * csv_file_or_its_stem
 %   as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
 %
-%Notes for developers.
+% *|Notes for developers|*
 %
 % For examples use:
 %== 
@@ -51,7 +51,7 @@ mtx_defaults( Defs ) :-
 % ?- mtx( data(mtcars), Mtx ).
 %==
 %
-%---++ Variable naming conventions
+% *|Variable naming conventions|*
 % * MtxIn  
 %   matrix in any acceptable representation (1st arg of mtx/2)
 % * Mtx    
@@ -88,9 +88,7 @@ is often and by convention either _hdr_ or _row_ and rows are usually term named
 
 When Opts is missing, it is set to the empty list (see options/2).
 
-See library(mtx).
-
-Modes
+*|Modes|*
 
 When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats (see mtx_type/2).
 
@@ -133,7 +131,7 @@ Opts is a term or list of terms from the following:
   access to the matrix via Handle, that is =!mtx(Handle,Mtx)!=
 
   * convert(Conv=false)
-  adds convert(Conv) to Wopts and Ropts (the default here, flipts the current convert(true) default in csv_write_file/3 - also for read)
+  adds convert(Conv) to Wopts and Ropts (the default here, flips the current convert(true) default in csv_write_file/3 - also for read)
   
   * csv_read(Ropts=[])
   options for csv_read_file/3
