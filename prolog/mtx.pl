@@ -55,6 +55,7 @@
 
 
 :- use_module(library(lists)).
+:- use_module(library(filesex)).
 
 :- use_module(library(lib)).
 :- lib( source(mtx), homonyms(true) ).
