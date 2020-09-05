@@ -54,9 +54,11 @@
         ).
 
 
+% auto-load libraries
 :- use_module(library(lists)).
-:- use_module(library(filesex)).
+:- use_module(library(apply)).
 :- use_module(library(option)).    % select_option/3.
+:- use_module(library(filesex)).
 
 :- use_module(library(lib)).
 :- lib( source(mtx), homonyms(true) ).
