@@ -166,7 +166,7 @@ Opts is a term or list of terms from the following:
     full path of the input file
 
   * row_call(RowG=false)
-    when not equal to false, execute =|call(RowG,Ln,RowIn,RowOut|= which allows arbitrary transforamtion of Rows as read-in
+    when not equal to false, execute =|call(RowG,Ln,RowIn,RowOut)|= which allows arbitrary transforamtion of Rows as read-in
     (see example below)
 
   * rows_name(RowsName)
