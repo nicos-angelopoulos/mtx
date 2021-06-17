@@ -239,6 +239,7 @@ Len = 33.
 
 @version 1:0, 2014/9/22 
 @version 1:1, 2016/11/10, added call to mtx_type/2 and predicated matrices
+@version 1:2, 2021/6/17, option:row_call()
 @tbd option read_options(ReadCsvOpts)
 @tbd option fill_header(true) then with new_header(HeaderArgsList)
 @tbd fill_header(replace) then, replaces header new_header(...) new_header(1..n) by default.

@@ -303,12 +303,12 @@ The pack is distributed under the MIT license.
 
 ==
 ?- mtx_version( Ver, Date ).
-Ver = 0:5:0,
-Date = date(2020, 3, 18).
+Ver = 0:6:0,
+Date = date(2021, 6, 17).
 ==
 
 @author nicos angelopoulos
-@version  0.5 2020/3/18
+@version  0.6 2021/7/17
 @license MIT
 
 */
@@ -316,4 +316,5 @@ Date = date(2020, 3, 18).
 % mtx_version( 0:2:0, date(2018,6,5) ).
 % mtx_version( 0:3:0, date(2019,4,18) ).
 % mtx_version( 0:4:0, date(2019,4,22) ).
-mtx_version( 0:5:0, date(2020,3,18) ).
+% mtx_version( 0:5:0, date(2020,3,18) ).
+mtx_version( 0:6:0, date(2021,6,17) ).% option:row_call()
