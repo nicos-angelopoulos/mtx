@@ -20,60 +20,62 @@ mtx_defaults( Defs ) :-
             % sep(0',)  % has no default value
            ].
 
-%% mtx( +Mtx ).
-%
-% True iff Mtx is a valid representation of a matrix.
-% 
-% This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
-%
-% Valid representations are (see mtx_type/2):
-%
-%  * list_of_lists
-%   which is assumed to be a per-column representation (see mtx_lists/2).
-%
-%  * list_of_terms 
-%   such as those read in with csv_read_file/2 but there is no restriction on term name and arity this is the canonical representation and each term is a row of the matrix
-%
-%  * atomic
-%   where the atom corresponds to a predicate name and the predicate with arity N is defined to succeeds with the returned argument instantiated to a list
-% 
-%  * csv_file_or_its_stem
-%   as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
-%
-% *|Notes for developers|*
-%
-% For examples use:
-%== 
-% ?- mtx_data( mtcars, Mtcars ).
-% M = [row(mpg, cyl, disp, hp, ....
-%
-% ?- mtx( pack(mtx/data/mtcars), Mtc ).
-%
-% ?- mtx( data(mtcars), Mtx ).
-%==
-%
-% *|Variable naming conventions|*
-% * MtxIn  
-%   matrix in any acceptable representation (1st arg of mtx/2)
-% * Mtx    
-%   canonical Mtx  (2nd arg of mtx/2)
-% * Hdr
-%   header
-% * Clm
-%   column data
-% * Cnm
-%   column name
-% * Cps
-%   column position (also Cpos)
-%
-% If a predicate definition has both Cnm and Cps define them in that order.
-%
-%==
-% ?- mtx_data( mtcars, Cars ), mtx( Cars ).
-%==
-%
-%@see library(mtx)
-%
+/** mtx( +Mtx ).
+
+True iff Mtx is a valid representation of a matrix.
+
+This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
+
+Valid representations are (see mtx_type/2):
+
+  * atomic
+    where the atom corresponds to a predicate name and the predicate with arity N is defined to succeeds with the
+    returned argument instantiated to a list
+ 
+  * csv_file_or_its_stem
+    as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
+
+  * list_of_lists
+    which is assumed to be a per-column representation (see mtx_lists/2).
+
+  * list_of_terms 
+   such as those read in with csv_read_file/2 but there is no restriction on term name and arity this is the
+   canonical representation and each term is a row of the matrix
+
+*|Notes for developers|*
+
+For examples use:
+== 
+?- mtx_data( mtcars, Mtcars ).
+M = [row(mpg, cyl, disp, hp, ....
+
+?- mtx( pack(mtx/data/mtcars), Mtc ).
+
+?- mtx( data(mtcars), Mtx ).
+==
+
+*|Variable naming conventions|*
+  * MtxIn  
+    matrix in any acceptable representation (1st arg of mtx/2)
+  * Mtx    
+    canonical Mtx  (2nd arg of mtx/2)
+  * Hdr
+    header
+  * Clm
+    column data
+  * Cnm
+    column name
+  * Cps
+    column position (also Cpos)
+ 
+If a predicate definition has both Cnm and Cps define them in that order.
+
+==
+?- mtx_data( mtcars, Cars ), mtx( Cars ).
+==
+
+@see library(mtx)
+*/
 mtx( Mtx ) :-
     mtx( Mtx, _ ).
 
@@ -89,7 +91,7 @@ is often and by convention either _hdr_ or _row_ and rows are usually term named
 
 When Opts is missing, it is set to the empty list (see options/2).
 
----** Modes
+*|Modes|*
 
 When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats (see mtx_type/2) to the canonical form.
 
@@ -124,7 +126,7 @@ Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
 Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
 ==
 
----** Options
+*|Options|*
 
 Opts is a term or list of terms from the following:
   * cache(Cache=false)
@@ -162,6 +164,10 @@ Opts is a term or list of terms from the following:
 
   * ret_mtx_input(InpF)
     full path of the input file
+
+  * row_call(RowG=false)
+    when not equal to false, execute =|call(RowG,Ln,RowIn,RowOut|= which allows arbitrary transforamtion of Rows as read-in
+    (see example below)
 
   * rows_name(RowsName)
     if present the header is left padded with RowsName
@@ -237,6 +243,7 @@ Len = 33.
 @tbd option fill_header(true) then with new_header(HeaderArgsList)
 @tbd fill_header(replace) then, replaces header new_header(...) new_header(1..n) by default.
 @see library(mtx)
+@see mtx/1
 */
 mtx( File, Rows ) :-
     mtx( File, Rows, [] ).
