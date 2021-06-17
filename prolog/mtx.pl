@@ -223,6 +223,7 @@ If a predicate definition has both Cnm and Cps define them in that order.
 Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 
 @author nicos angelopoulos
+@version  0.6 2021/6/17, option:row_call(RowC)
 @version  0.5 2020/3/17, work-around SWI broken back-compatibility (std aliases)
 @version  0.4 2019/4/22
 @version  0.3 2019/4/18

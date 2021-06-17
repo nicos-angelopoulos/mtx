@@ -26,3 +26,13 @@ mtx_read_stream( Row, Stream, Data, Copts ) :-
     csv_read_row( Stream, Row1, Copts ),
     Data = [Row|Data1],
     mtx_read_stream( Row1, Stream, Data1, Copts ).
+
+mtx_read_stream( end_of_file, _Stream, _Ln, _RowG, Data, _Copts ) :-
+    !,
+    Data = [].
+mtx_read_stream( Row, Stream, Ln, RowG, Data, Copts ) :-
+    call( RowG, Ln, Row, Keep ),
+    Data = [Keep|Data1],
+    csv_read_row( Stream, Row1, Copts ),
+    Ln1 is Ln + 1,
+    mtx_read_stream( Row1, Stream, Ln1, RowG, Data1, Copts ).
