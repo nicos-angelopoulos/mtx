@@ -234,6 +234,11 @@ Len = 33.
     csv_write_file( TmpF, [row(c_a,c_b,c_c),row(1,a,b),row(2,aa,bb)], [] ),
     mtx( TmpF, Mtx, row_call(only_c_b(_)) ).
 
+TmpF = '/tmp/swipl_testo_8588_1',
+Mtx = [row(c_b), row(a), row(aa)].
+
+?- mtx( '/tmp/swipl_testo_8588_1', Full ).
+Full = [row(c_a, c_b, c_c), row(1, a, b), row(2, aa, bb)].
 ==
 
 
