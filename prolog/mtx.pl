@@ -308,7 +308,7 @@ Date = date(2021, 6, 17).
 ==
 
 @author nicos angelopoulos
-@version  0.6 2021/7/17
+@version  0.6 2021/6/17
 @license MIT
 
 */
