@@ -435,19 +435,6 @@ mtx_file_abs( AbsF, File, Rows, Opts ) :-
 mtx_csv_read_file( false, false, AbsF, Rows, ROpts ) :-
     !,
     csv_read_file( AbsF, Rows, ROpts ).
-mtx_csv_read_file( false, RowG, AbsF, Rows, ROpts ) :-
-    mtx_options_csv( [match(false)|ROpts], AbsF, TopOpts, _ ),
-    mtx_options_csv( ROpts, AbsF, CsvOpts, OpenOpts ),
-    setup_call_cleanup( 
-        open(AbsF, read, Stream, OpenOpts),
-        ( 
-            csv_read_row(Stream, Row0, TopOpts ),
-            mtx_read_stream(Row0, Stream, 1, RowG, Rows, CsvOpts)
-        ),
-            close(Stream) 
-    ).
-% mtx_csv_read_file( Skh, AbsF, Rows, ROpts ),
-     
 mtx_csv_read_file( PfxPrv, RowG, AbsF, Rows, ROpts ) :-
     ( number(PfxPrv) -> 
         atom_codes( Pfx, [PfxPrv] )
