@@ -6,8 +6,8 @@
 %% mtx_column( +Mtx, ?Cid, -Column, -Cname, -Cpos ).
 %
 %  Select column data from Csv for column identified by Cid.
-%  Cid identifies a column in Mtx either by mean of name or 
-%  an integer corresponding to position.
+%  Cid identifies a column in Mtx either by means of its name or 
+%  an integer corresponding to its position.
 %  Note that name of selected header (Nhdr) is not in Column.
 %  Cpos is the position of Cid and Cname is its column name.
 % 
@@ -44,9 +44,8 @@ mtx_column_set( Mtx, Cid, Column, Set ) :-
 	mtx_column( Mtx, Cid, Column ),
 	sort( Column, Set ).
 
-%% mtx_column( +Mtx, ?Cid, -Column, -Cname, -Cpos ).
-%% mtx_columns( +Csv, +Names, -Columns ).
-%% mtx_columns( +Csv, +Names, +Order, -Columns ).
+%% mtx_columns( +Mtx, +Names, -Columns ).
+%% mtx_columns( +Mtx, +Names, +Order, -Columns ).
 %
 %  Select data Columns from columns with header names Names (a list). 
 %  Note that headers (ie. Names are not in Columns).
@@ -61,6 +60,7 @@ mtx_column_set( Mtx, Cid, Column, Set ) :-
 %  back compatibility
 %
 % % fixme: use the cars csv from pac()
+%==
 % ?- mtx_read_file( 'example.csv', Ex ), mtx_columns( Ex, [c,b], ABs ).
 % Ex = [row(a, b, c), row(1, 2, 3), row(4, 5, 6), row(7, 8, 9)],
 % ABs = [row(2, 3), row(5, 6), row(8, 9)].
@@ -69,6 +69,7 @@ mtx_column_set( Mtx, Cid, Column, Set ) :-
 % ?- mtx_read_file( 'example.csv', Ex ), mtx_columns( Ex, [c,b], false, ABs ).
 % Ex = [row(a, b, c), row(1, 2, 3), row(4, 5, 6), row(7, 8, 9)],
 % ABs = [row(3, 2), row(6, 5), row(9, 8)].
+%:=
 %  
 %  @author nicos angelopoulos
 %  @version 0:2,  2014/2/2
