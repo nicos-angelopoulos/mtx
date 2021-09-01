@@ -1,7 +1,8 @@
 ---   Releases   ---
 --------------------
 
-0.6
+0.6         @  21.06.17
+     21.06.17   OPTS:   row_call(RowC)
      20.09.05   DEPS:   explicit load of library(apply)
      20.08.18   DEPS:   explicit load of library(filesex)
                 DEPS:   explicit load of library(option)

@@ -15,211 +15,242 @@ mtx_defaults( Defs ) :-
              csv_write([]),
              cache(false),
              from_cache(true),
-             skip_heading(false)
+             skip_heading(false),
+             row_call(false)
             % sep(0',)  % has no default value
            ].
 
-%% mtx( +Mtx ).
-%
-% True iff Mtx is a valid representation of a matrix.
-% 
-% This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
-%
-% Valid representations are (see mtx_type/2):
-%
-%  * list_of_lists
-%   which is assumed to be a per-column representation (see mtx_lists/2).
-%
-%  * list_of_terms 
-%   such as those read in with csv_read_file/2 but there is no restriction on term name and arity this is the canonical representation and each term is a row of the matrix
-%
-%  * atomic
-%   where the atom corresponds to a predicate name and the predicate with arity N is defined to succeeds with the returned argument instantiated to a list
-% 
-%  * csv_file_or_its_stem
-%   as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
-%
-% *|Notes for developers|*
-%
-% For examples use:
-%== 
-% ?- mtx_data( mtcars, Mtcars ).
-% M = [row(mpg, cyl, disp, hp, ....
-%
-% ?- mtx( pack(mtx/data/mtcars), Mtc ).
-%
-% ?- mtx( data(mtcars), Mtx ).
-%==
-%
-% *|Variable naming conventions|*
-% * MtxIn  
-%   matrix in any acceptable representation (1st arg of mtx/2)
-% * Mtx    
-%   canonical Mtx  (2nd arg of mtx/2)
-% * Hdr
-%   header
-% * Clm
-%   column data
-% * Cnm
-%   column name
-% * Cps
-%   column position (also Cpos)
-%
-% If a predicate definition has both Cnm and Cps define them in that order.
-%
-%==
-% ?- mtx_data( mtcars, Cars ), mtx( Cars ).
-%==
-%
-%@see library(mtx)
-%
+/** mtx( +Mtx ).
+
+True iff Mtx is a valid representation of a matrix.
+
+This is a synonym for =|mtx(Mtx, _Canonical)|=. Cite this predicate for valid input representations of Mtx variables.
+
+Valid representations are (see mtx_type/2):
+
+  * atomic
+    where the atom corresponds to a predicate name and the predicate with arity N is defined to succeeds with the
+    returned argument instantiated to a list
+ 
+  * csv_file_or_its_stem
+    as possible to be read by csv_read_file/2 alias paths and normal delimited file extension can be ommited
+
+  * list_of_lists
+    which is assumed to be a per-column representation (see mtx_lists/2).
+
+  * list_of_terms 
+   such as those read in with csv_read_file/2 but there is no restriction on term name and arity this is the
+   canonical representation and each term is a row of the matrix
+
+*|Notes for developers|*
+
+For examples use:
+== 
+?- mtx_data( mtcars, Mtcars ).
+M = [row(mpg, cyl, disp, hp, ....
+
+?- mtx( pack(mtx/data/mtcars), Mtc ).
+
+?- mtx( data(mtcars), Mtx ).
+==
+
+*|Variable naming conventions|*
+  * MtxIn  
+    matrix in any acceptable representation (1st arg of mtx/2)
+  * Mtx    
+    canonical Mtx  (2nd arg of mtx/2)
+  * Hdr
+    header
+  * Clm
+    column data
+  * Cnm
+    column name
+  * Cps
+    column position (also Cpos)
+ 
+If a predicate definition has both Cnm and Cps define them in that order.
+
+==
+?- mtx_data( mtcars, Cars ), mtx( Cars ).
+==
+
+@see library(mtx)
+*/
 mtx( Mtx ) :-
     mtx( Mtx, _ ).
 
-%% mtx( +Any, -Canonical ).
-%% mtx( ?Res, +Canonical ).
-%% mtx( ?Any, ?Canonical, +Opts ).
-%
-% Convert to Canonical representation of matrix Any or pass the Canonical representation to output Res.
-% 
-% The canonical representation of a matrix is a list of compounds, the first
-% of which is the header and the rest are the rows. The term name of the compounds is not strict but header
-% is often and by convention either _hdr_ or _row_ and rows are usually term named by _row_. 
-% 
-% When Opts is missing, it is set to the empty list (see options/2).
-% 
-% *|Modes|*
-%
-% When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats (see mtx_type/2) to the canonical form.
-% 
-% When both +Canonical and +Res are ground, Res is taken to be a file to write Canonical on.
-% 
-% Under +Canonical and -Res, Res is bound to Canonical (allows non-output).
-% 
-% This predicate is often called from within mtx pack predicates to translate inputs/outputs to canonical matrices,
-% before and after performing the intended operations.
-% 
-% The predicate can be used with data/1 alias, to look at data directories of packs for input data matrices.<br>
-% The following three calls are equivalent.
-% 
-% ==
-% ?- mtx( data(mtcars), Mtcars, sep(comma) ).
-% ?- mtx( data(mtcars), Mtcars ).
-% ?- mtx( pack('mtx/data/mtcars.csv'), Mtcars).
-% ==
-%
-% Data matrices can be debug-ed via the =dims= and =length= goals in debug_call/3.<br>
-% ==
-% ?- debug(mtx_ex).
-% ?- use_module(library(lib)).
-% ?- lib(debug_call).
-% ?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, dims, mtcars/Mtcars ).
-% % Dimensions for matrix,  (mtcars) nR: 33, nC: 11.
-% Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
-%
-% ?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, len, mtcars/Mtcars ).
-% ?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, length, mtcars/Mtcars ).
-% % Length for list, mtcars: 33
-% Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
-% ==
-% 
-% *|Options|*
-%
-% Opts is a term or list of terms from the following:
-%
-%  * cache(Cache=false)
-%  if _true_ file is cached as a fact and attempts to reload the same csv file will use
-%  the cache. Any other value (Handle) than _true_ or _false_ will cache the file
-%  and in addition to using the cache when reloading the csv file it also allow 
-%  access to the matrix via Handle, that is =|mtx(Handle,Mtx)|=.
-%
-%  * convert(Conv=false)
-%  adds convert(Conv) to Wopts and Ropts (the default here, flips the current convert(true) default in csv_write_file/3 - also for read)
-%  
-%  * csv_read(Ropts=[])
-%  options for csv_read_file/3
-%
-%  * csv_write(Wopts=[])
-%  options for csv_write_file/3
-%
-%  * from_cache(FromCache=true)
-%  when _true_ reads from cache if it can match Any to a handle or a file
-%
-%  * input_file(InpFile)
-%  defines input file for the purposes of creating an output file in conjuction with Psfx
-%
-%  * match(Match)
-%  if present adds match_arity(Match) into Wopts and Ropts
-%
-%  * output_postfix(Psfx)
-%  the postfix of the output file (added at end of stem of InpFile)
-%
-%  * output_file(OutF)
-%  defines output to csv when Any is a var/1 and Canonical is ground/1.
-%
-%  * report(Rep=false)
-%  report the read/write and dims of corresponding matrix
-%
-%  * ret_mtx_input(InpF)
-%  full path of the input file
-%
-%  * rows_name(RowsName)
-%  if present the header is left padded with RowsName
-%
-%  * sep(Sep)
-%  if present adds separator(SepCode) into Wopts and Ropts, via mtx_sep(Sep,SepCode), mtx_sep/2
-%
-%  * skip_heading(Skh=false)
-%  provide prefix (number, seen as code; atom; or list, seen as codes) that removes heading lines
-%
-%  * type(Type)
-%  returns the type of input matrix, see mtx_type/2
-%==
-%
-%?- mtx( pack(mtx/data/mtcars), Cars ), 
-%   length( Cars, Length ).
-%Cars = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, ....],
-%Length = 33.
-%
-%?- mtx( What, [hdr(a,b,c),row(1,2,3),row(4,5,6),row(7,8,9)], [output_file(testo)] ).
-%What = testo.
-%
-%?- shell( 'more testo' ).
-%a,b,c
-%1,2,3
-%4,5,6
-%7,8,9
-%true.
-%
-%?- mtx( What, [hdr(a,b,c),row(1,2,3),row(4,5,6),row(7,8,9)], [input_file('testo.csv'),output_postfix('_demo')] ).
-%What = testo_demo.csv.
-%
-%?- mtx( pack(mtx/data/mtcars), Cars, cache(cars) ).
-%Cars = [row(mpg, cyl...)|...]
-%?- debug(mtx(mtx)).
-%?- mtx( cars, Cars ).
-%Using cached mtx with handle: cars
-%Cars = [row(mpg, cyl...)|...]
-%
-%?- mtx( pack(mtx/data/mtcars), Mtx, cache(mtcars) ), assert(mc(Mtx)), length( Mtx, Len ).
-%...
-%Len = 33.
-%?- mtx( mtcars, Mtcars ), length( Mtcars, Len ).
-%...
-%Len = 33.
-%?- mtx( mc, Mc), length( Mc, Len ).
-%...
-%% Len = 33.
-%==
-%
-%@version 1:0, 2014/9/22 
-%@version 1:1, 2016/11/10, added call to mtx_type/2 and predicated matrices
-%@tbd option read_options(ReadCsvOpts)
-%@tbd option fill_header(true) then with new_header(HeaderArgsList)
-%@tbd fill_header(replace) then, replaces header new_header(...) new_header(1..n) by default.
-%@see library(mtx)
-%
+/** mtx( +Any, -Canonical ).
+    mtx( ?Res, +Canonical ).
+    mtx( ?Any, ?Canonical, +Opts ).
 
+Convert to Canonical representation of matrix Any or pass the Canonical representation to output Res.
+
+The canonical representation of a matrix is a list of compounds, the first
+of which is the header and the rest are the rows. The term name of the compounds is not strict but header
+is often and by convention either _hdr_ or _row_ and rows are usually term named by _row_. 
+
+When Opts is missing, it is set to the empty list (see options/2).
+
+*|Modes|*
+
+When +Any is ground and -Canonical is unbound, Any is converted from any of the accepted input formats (see mtx_type/2) to the canonical form.
+
+When both +Canonical and +Res are ground, Res is taken to be a file to write Canonical on.
+
+Under +Canonical and -Res, Res is bound to Canonical (allows non-output).
+
+This predicate is often called from within mtx pack predicates to translate inputs/outputs to canonical matrices,
+before and after performing the intended operations.
+
+The predicate can be used with data/1 alias, to look at data directories of packs for input data matrices.<br>
+The following three calls are equivalent.
+
+==
+?- mtx( data(mtcars), Mtcars, sep(comma) ).
+?- mtx( data(mtcars), Mtcars ).
+?- mtx( pack('mtx/data/mtcars.csv'), Mtcars).
+==
+
+Data matrices can be debug-ed via the =dims= and =length= goals in debug_call/3.<br>
+==
+?- debug(mtx_ex).
+?- use_module(library(lib)).
+?- lib(debug_call).
+?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, dims, mtcars/Mtcars ).
+% Dimensions for matrix,  (mtcars) nR: 33, nC: 11.
+Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
+
+?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, len, mtcars/Mtcars ).
+?- mtx( data(mtcars), Mtcars ), debug_call( mtx_ex, length, mtcars/Mtcars ).
+% Length for list, mtcars: 33
+Mtcars = [row(mpg, cyl, disp, hp, ....)|...]
+==
+
+*|Options|*
+
+Opts is a term or list of terms from the following:
+  * cache(Cache=false)
+    if _true_ file is cached as a fact and attempts to reload the same csv file will use
+    the cache. Any other value (Handle) than _true_ or _false_ will cache the file
+    and in addition to using the cache when reloading the csv file it also allow 
+    access to the matrix via Handle, that is =|mtx(Handle,Mtx)|=.
+
+  * convert(Conv=false)
+    adds convert(Conv) to Wopts and Ropts (the default here, flips the current convert(true) default in csv_write_file/3 - also for read)
+
+  * csv_read(Ropts=[])
+    options for csv_read_file/3
+
+  * csv_write(Wopts=[])
+    options for csv_write_file/3
+
+  * from_cache(FromCache=true)
+    when _true_ reads from cache if it can match Any to a handle or a file
+
+  * input_file(InpFile)
+    defines input file for the purposes of creating an output file in conjuction with Psfx
+
+  * match(Match)
+    if present adds match_arity(Match) into Wopts and Ropts
+
+  * output_postfix(Psfx)
+    the postfix of the output file (added at end of stem of InpFile)
+
+  * output_file(OutF)
+    defines output to csv when Any is a var/1 and Canonical is ground/1.
+
+  * report(Rep=false)
+    report the read/write and dims of corresponding matrix
+
+  * ret_mtx_input(InpF)
+    full path of the input file
+
+  * row_call(RowG=false)
+    when not equal to false, execute =|call(RowG,Ln,RowIn,RowOut)|= which allows arbitrary transformation of Rows while reading-in
+    (see example below)
+
+  * rows_name(RowsName)
+    if present the header is left padded with RowsName
+
+  * sep(Sep)
+    if present adds separator(SepCode) into Wopts and Ropts, via mtx_sep(Sep,SepCode), mtx_sep/2
+
+  * skip_heading(Skh=false)
+    provide prefix (number, seen as code; atom; or list, seen as codes) that removes heading lines
+
+  * type(Type)
+    returns the type of input matrix, see mtx_type/2
+==
+
+?- mtx( pack(mtx/data/mtcars), Cars ), 
+   length( Cars, Length ).
+Cars = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, ....],
+Length = 33.
+
+?- mtx( What, [hdr(a,b,c),row(1,2,3),row(4,5,6),row(7,8,9)], [output_file(testo)] ).
+What = testo.
+
+?- shell( 'more testo' ).
+a,b,c
+1,2,3
+4,5,6
+7,8,9
+true.
+
+?- mtx( What, [hdr(a,b,c),row(1,2,3),row(4,5,6),row(7,8,9)], [input_file('testo.csv'),output_postfix('_demo')] ).
+What = testo_demo.csv.
+
+?- mtx( pack(mtx/data/mtcars), Cars, cache(cars) ).
+Cars = [row(mpg, cyl...)|...]
+?- debug(mtx(mtx)).
+?- mtx( cars, Cars ).
+Using cached mtx with handle: cars
+Cars = [row(mpg, cyl...)|...]
+
+?- mtx( pack(mtx/data/mtcars), Mtx, cache(mtcars) ), assert(mc(Mtx)), length( Mtx, Len ).
+...
+Len = 33.
+?- mtx( mtcars, Mtcars ), length( Mtcars, Len ).
+...
+Len = 33.
+?- mtx( mc, Mc), length( Mc, Len ).
+...
+Len = 33.
+==
+
+==
+?- assert( (
+          only_c_b(Cb,Ln,RowIn,RowOut) :-
+               ( Ln=:=1 ->
+                    once(arg(Cb,RowIn,c_b)),
+                    RowOut = row(c_b)
+                    ;
+                    arg(Cb,RowIn,CbItem),
+                    RowOut = row(CbItem)
+               )
+          )
+        ).
+?-  tmp_file( testo, TmpF ),
+    csv_write_file( TmpF, [row(c_a,c_b,c_c),row(1,a,b),row(2,aa,bb)], [] ),
+    mtx( TmpF, Mtx, row_call(only_c_b(_)) ).
+
+TmpF = '/tmp/swipl_testo_8588_1',
+Mtx = [row(c_b), row(a), row(aa)].
+
+?- mtx( '/tmp/swipl_testo_8588_1', Full ).
+Full = [row(c_a, c_b, c_c), row(1, a, b), row(2, aa, bb)].
+==
+
+
+@version 1:0, 2014/9/22 
+@version 1:1, 2016/11/10, added call to mtx_type/2 and predicated matrices
+@version 1:2, 2021/6/17, option:row_call()
+@tbd option read_options(ReadCsvOpts)
+@tbd option fill_header(true) then with new_header(HeaderArgsList)
+@tbd fill_header(replace) then, replaces header new_header(...) new_header(1..n) by default.
+@see library(mtx)
+@see mtx/1
+*/
 mtx( File, Rows ) :-
     mtx( File, Rows, [] ).
 
@@ -400,15 +431,16 @@ mtx_file_abs( AbsF, File, Rows, Opts ) :-
     options( csv_read(CROpts), Opts, en_list(true) ),
     mtx_file_csv_options( Opts, CROpts, ROpts ),
     options( skip_heading(Skh), Opts ),
-    mtx_csv_read_file( Skh, AbsF, Rows, ROpts ),
+    options( row_call(RowG), Opts ),
+    mtx_csv_read_file( Skh, RowG, AbsF, Rows, ROpts ),
     options( [report(Rep),cache(Cache)], Opts ),
     mtx_report( Rep, read, File, Rows ),
     mtx_data_to_store( Cache, AbsF, Rows ).
 
-mtx_csv_read_file( false, AbsF, Rows, ROpts ) :-
+mtx_csv_read_file( false, false, AbsF, Rows, ROpts ) :-
     !,
     csv_read_file( AbsF, Rows, ROpts ).
-mtx_csv_read_file( PfxPrv, AbsF, Rows, ROpts ) :-
+mtx_csv_read_file( PfxPrv, RowG, AbsF, Rows, ROpts ) :-
     ( number(PfxPrv) -> 
         atom_codes( Pfx, [PfxPrv] )
         ;
@@ -425,7 +457,11 @@ mtx_csv_read_file( PfxPrv, AbsF, Rows, ROpts ) :-
         ( 
             csv_read_row(Stream, Row0, TopOpts ),
             mtx_read_headings(Row0, Pfx, Stream, Row1, TopOpts),
-            mtx_read_stream(Row1, Stream, Rows, CsvOpts)
+            ( RowG == false ->
+               mtx_read_stream(Row1, Stream, Rows, CsvOpts)
+               ;
+               mtx_read_stream(Row0, Stream, 1, RowG, Rows, CsvOpts)
+            )
         ),
             close(Stream) 
     ).

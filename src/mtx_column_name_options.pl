@@ -1,14 +1,14 @@
 
 :- use_module( library(mtx) ).
-:- lib( options ). 				% en_list/2
+:- lib(options).
 
-:- lib( mtx_column_default/4 ).
+:- lib(mtx_column_default/4).
 
 %% mtx_column_name_options( +Mtx, +StdCnm, +Def, -Column, +Opts )
 % 
 % Select data Column from Mtx. StdCnm is the standard/expected name of the column, 
 % but this is overriden by Cnm if cnm_StdCnm(Cnm) is in Opts.
-% Def is propagated as the 3rd argument to mtx_column_default/3,
+% Def is propagated as the 3rd argument to mtx_column_default/4,
 % except when it is an atomic different to true and false.
 % In the latter case, a ball is prepared which includes Def in its arguments
 % with the intution that in that case Def is an atom identifying the 
@@ -33,7 +33,7 @@
 % | cnm_to(To=to)    | to     |
 % | cnm_weight(Weight=weight)| weight |
 %
-% @mtx_column_defaul/4
+% @see mtx_column_default/4
 %
 mtx_column_name_options( Mtx, StdCnm, MtxDef, Vals, Opts ) :-
 	mtx_column_name_options( StdCnm, Cnm, Opts ),
