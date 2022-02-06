@@ -1,6 +1,10 @@
 ---   Releases   ---
 --------------------
 
+0.7
+     22.02.06   ERROR:  throw errors if cannot decipher +/- modality
+                ERROR:  update some of the throws to pack_errors throw/2
+
 0.6         @  21.06.17
      21.06.17   OPTS:   row_call(RowC)
      20.09.05   DEPS:   explicit load of library(apply)

@@ -264,10 +264,17 @@ mtx_ground_ness( true/true, Mtx, Canon, Opts ) :- !,
     mtx_ground_canonical( Mtx, Canon, Opts ).
 mtx_ground_ness( true/_, Mtx, Canon, Opts ) :- !,
     % mtx_canonical( Mtx, Canon, Opts ),
-    mtx_type( Mtx, Type ),
-    ground( Type ),
-    options_return( type(Type), Opts ),
-    mtx_type_canonical( Type, Mtx, Canon, Opts ).
+    ( mtx_type(Mtx,Type) ->
+         ground( Type ),
+         options_return( type(Type), Opts ),
+         mtx_type_canonical( Type, Mtx, Canon, Opts )
+         ;
+         ( (atomic(Mtx),os_ext(Ext,Mtx),atom_codes(Ext,[_,_,_])) ->
+                    throw( input_file_missing(Mtx), mtx:mtx/3 )
+                    ;
+                    throw( cannot_decipher_mtx_type_for_input(Mtx), mtx:mtx/3 )
+         )
+    ).
 mtx_ground_ness( _/true, Mtx, Canon, _Opts ) :- !,  % passes results back to variable instead of writing
     Mtx = Canon.
 mtx_ground_ness( _Else, Mtx, Canon, _Opts ) :- !,
@@ -313,7 +320,7 @@ mtx_ground_canonical( Mtx, Canon, Opts ) :-
 mtx_ground_canonical_type( true, _Type, Mtx, Canon, Opts ) :-
     mtx_to_file( Canon, Mtx, Opts ).
 mtx_ground_canonical_type( false, Type, _Mtx, _Canon, _Opts ) :-
-    throw( pack_error(mtx,mtx/3,non_canonical(Type)) ).
+    throw( non_canonical(Type), mtx:mtx3 ).
 
 /*
 mtx( File, Rows, Args ) :-
@@ -495,7 +502,7 @@ mtx_data_handle_to_file( Handle, AbsF ) :-
     mtx_data_handle_file( Handle, OthF ),
     OthF \== AbsF,
     !,
-    throw( pack_error(mtx,mtx/3,handle_exists(Handle,OthF,AbsF)) ).
+    throw( handle_exists(Handle,OthF,AbsF), mtx:mtx/3 ).
 mtx_data_handle_to_file( Handle, AbsF ) :-
     retractall( mtx:mtx_data_handle_file(Handle,_) ),  % bit lazy
     assert( mtx:mtx_data_handle_file(Handle,AbsF) ).
@@ -504,7 +511,7 @@ mtx_data_from_store( Handle, Rows ) :-
     mtx_data_store( Handle, Rows ),
     !.
 mtx_data_from_store( Handle, _Rows ) :-
-    throw( pack_error(mtx,mtx/3,handle_inconsistency(Handle)) ).
+    throw( handle_inconsistency(Handle), mtx:mtx/3 ).
 
 mtx_file_csv_options( Opts, RoWOpts, CsvOpts ) :-
     % 19.01.30: we should probably give RoWOpts priority for match() and separator() ...
