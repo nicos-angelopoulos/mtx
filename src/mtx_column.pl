@@ -12,7 +12,7 @@
 %  Cpos is the position of Cid and Cname is its column name.
 % 
 %  When Cid is an unbound all possible values are erumerated,
-%  whic Cid = Cname.
+%  with Cid = Cname.
 %
 %==
 % ?- mtx_mtcars(Mtc), mtx_column( Mtc, carb, Carbs ).
