@@ -2,6 +2,7 @@
 --------------------
 
 0.7
+     22.10.15   IFACE:  added mtx_column_kv/4 and converted the findall call to iteration
      22.02.06   ERROR:  throw errors if cannot decipher +/- modality
                 ERROR:  update some of the throws to pack_errors throw/2
 

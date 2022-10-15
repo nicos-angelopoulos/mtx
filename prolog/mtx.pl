@@ -14,7 +14,7 @@
                 mtx_column_name_options/5, mtx_column_name_options/3,
                 mtx_options_select/4, mtx_options_select/5,
                 mtx_column_select/4, 
-                mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_columns_kv/6,
+                mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_column_kv/4,mtx_columns_kv/6,
                 mtx_column_add/4,
                 mtx_column_replace/5, mtx_column_replace/6,
                 mtx_column_threshold/5, mtx_column_threshold/6, 
@@ -79,6 +79,7 @@
 
 :- lib(mtx/1).
 :- lib(mtx_column_kv/3).
+:- lib(mtx_column_kv/4).
 :- lib(mtx_header/2).
 :- lib(mtx_header_body/3).
 :- lib(mtx_has_header_add/4).
