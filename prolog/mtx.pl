@@ -79,7 +79,6 @@
 
 :- lib(mtx/1).
 :- lib(mtx_column_kv/3).
-:- lib(mtx_column_kv/4).
 :- lib(mtx_header/2).
 :- lib(mtx_header_body/3).
 :- lib(mtx_has_header_add/4).
