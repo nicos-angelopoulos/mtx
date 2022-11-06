@@ -40,6 +40,7 @@
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
                 mtx_column_subsets/3,
+                mtx_print/2,                            % +Mtx, +Opts
                 %
                 mtx_read_table/4,   % +CsvF, +RowsName, -Table, +Opts
                 mtx_read_stream/3, mtx_read_stream/4,  % [+Row0], +Stream, -Data, +CsvOpts
@@ -129,6 +130,7 @@
 :- lib(mtx_read_stream/4).
 :- lib(mtx_column_join/5).
 :- lib(mtx_options_select/5).
+:- lib(mtx_print/2).
 
 :- lib(end(mtx)).
 
