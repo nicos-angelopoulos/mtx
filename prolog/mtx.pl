@@ -258,7 +258,7 @@ mtx_data( mtcars, Mtcars ) :-
 
 /** mtx_sep_type(+SepType).
 
-True iff SepType is a recognised mtx separator.
+True iff SepType is a recognised mtx separator alias.
 
 @author nicos angelopoulos
 @version  0.1 2017/06/27
@@ -277,6 +277,9 @@ Sep can be a code, or one of:
   * tab
      for tab delimeted files
 
+  * '\t'
+     for tab delimeted
+
   * comma
      for csvs (comma separated)
 
@@ -294,6 +297,7 @@ mtx_sep( Code, Code ) :-
     integer( Code ).  % fixme: better check ?
 
 mtx_sep_known( tab,   0'\t ).
+mtx_sep_known( '\t',  0'\t ).
 mtx_sep_known( comma, 0',  ).
 mtx_sep_known( space, 0'   ).
 
