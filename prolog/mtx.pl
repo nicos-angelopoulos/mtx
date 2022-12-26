@@ -288,6 +288,7 @@ Sep can be a code, or one of:
 
 @author nicos angelopoulos
 @version  0.2 2018/03/07, added space
+@version  0.3 2022/12/26, added '\t'
 
 */
 mtx_sep( Sep, Code ) :-
