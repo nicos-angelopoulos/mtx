@@ -135,8 +135,9 @@ Opts is a term or list of terms from the following:
     and in addition to using the cache when reloading the csv file it also allow 
     access to the matrix via Handle, that is =|mtx(Handle,Mtx)|=.
 
-  * convert(Conv=false)
-    adds convert(Conv) to Wopts and Ropts (the default here, flips the current convert(true) default in csv_write_file/3 - also for read)
+  * convert(Conv=true)
+    adds convert(Conv) to Wopts and Ropts 
+    (in the past =|false|= value was used to flip option in csv_write_file/3 and csv read pred)
 
   * csv_read(Ropts=[])
     options for csv_read_file/3
