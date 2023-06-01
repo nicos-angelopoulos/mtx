@@ -1,5 +1,4 @@
 
-% :- lib(term_type).  % term_codes/2, term_atom/2.
 :- lib(stoics_lib:en_list/2).
 
 %% compare_multi_ops_list( +Multi, -List ).
@@ -21,9 +20,11 @@ compare_multi_ops_list( Op, OpsList ) :-
 	!,
 	% term_codes( Op, Codes ),
 	term_to_atom( Op, Atom ),
-    atom_codes( Atom, Codes ),
-	maplist( en_list, Codes, CodeLists ),
-	maplist( term_atom, CodeLists, OpsList ).
-
+     atom_codes( Atom, Codes ),
+	maplist( compare_multi_ops_codes_to_term, Codes, OpsList ).
 compare_multi_ops_list( Op, _List ) :-
 	throw( fixme(not_an_operator(Op) ) ).
+
+compare_multi_ops_codes_to_term( Code, Term ) :-
+     atom_codes( Atom, [Code] ),
+     read_term_from_atom( Atom, Term, [] ).
