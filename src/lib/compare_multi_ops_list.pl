@@ -18,7 +18,6 @@
 compare_multi_ops_list( Op, OpsList ) :-
 	current_op( _, _, Op ),  % fixme can we be more specific? should be infix...
 	!,
-	% term_codes( Op, Codes ),
 	term_to_atom( Op, Atom ),
      atom_codes( Atom, Codes ),
 	maplist( compare_multi_ops_codes_to_term, Codes, OpsList ).
