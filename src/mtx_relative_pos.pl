@@ -1,7 +1,7 @@
 %% mtx_relative_pos( +N, +K, +Hdr, -Pos ).
 %% mtx_relative_pos( +N, +K, +Hdr, +Nadj, -Pos ).
 %
-% R is the absolute position of the Nth position relative to K.
+% Pos is the absolute position of the Nth position relative to K.
 %
 % If N unifies to abs_pos(R), then Pos is equal to R.
 % In any other case, N is assumed to be the RHS of an addition which
