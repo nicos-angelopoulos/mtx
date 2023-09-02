@@ -6,7 +6,7 @@
                 mtx_header/2, mtx_header_body/3,  mtx_header_body/5,
                 mtx_has_header_add/4,
                 mtx_header_column_name_pos/4, mtx_header_column_pos/3,
-                mtx_header_column_multi_pos/4, mtx_relative_pos/4,
+                mtx_header_column_multi_pos/4, mtx_relative_pos/4, mtx_relative_pos/5,
                 mtx_header_cids_order/3,
                 mtx_name_prefix_column/5,
                 mtx_column/3, mtx_column/5, mtx_column_default/4, 

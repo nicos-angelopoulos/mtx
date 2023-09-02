@@ -2,6 +2,7 @@
 --------------------
 
 0.7
+     23.09.02   FIXED:  mtx_relative_pos/5 to module interface, doc example of /5 version
      23.06.01   DEPS:   remove call to term_atom/2 from lib(term_type)
      22.12.26   IFACE:  mtx_sep/2 now recognises '\t' as alias to 0'\t
      22.11.06   IFACE:  mtx_print/2 print matrices in tabular format
