@@ -1,6 +1,4 @@
 
-:- lib(mtx).    % mtx/2, mtx_header_column_pos/3.
-
 :- lib(compare_multi_ops_list/2).
 
 %% mtx_column_threshold( +Csv, +Clm, +Val, +Dir, -Sel ).
@@ -19,7 +17,7 @@
 %
 %  The Opts version, only fires if the following Option is present:
 %  * mtx_cuttoff(Clm,Val,Dir)
-%    with the same semantics as the /5 version.
+%    with the same semantics as the /5 version. (Dir == false, means do not apply threhold.)
 %
 %  If the option does not exist, the predicate succeeds with =|Sel = Csv|=.
 %
@@ -50,6 +48,7 @@ mtx_column_threshold( CsvIn, Clm, Val, Dir, Out ) :-
 	compare_multi_ops_list( Dir, Dirs ),
 	include( row_threshold(Pos,Val,Dirs), Rows, OutRows ),
 	mtx( Out, [Hdr|OutRows] ).
+
 mtx_column_threshold( CsvIn, Clm, Val, Dir, Sel, Rej ) :-
 	mtx( CsvIn, Csv ),
 	Csv = [Hdr|Rows],
@@ -62,8 +61,8 @@ mtx_column_threshold( CsvIn, Clm, Val, Dir, Sel, Rej ) :-
 mtx_column_threshold( CsvIn, Sel, OptS ) :-
      en_list( OptS, Opts ),
      % fixme: add a way to return the Rej-ected rows
-     ( memberchk(mtx_cutoff(Clm,Val,Dir), Opts) -> 
-          mtx_column_threshold( CsvIn, Clm, Val, Dir Sel )
+     ( (memberchk(mtx_cutoff(Clm,Val,Dir), Opts), Dir \== false) -> 
+          mtx_column_threshold( CsvIn, Clm, Val, Dir, Sel )
           ;
           CsvIn = Sel
      ).
