@@ -17,7 +17,7 @@
                 mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_column_kv/4,mtx_columns_kv/6,
                 mtx_column_add/4,
                 mtx_column_replace/5, mtx_column_replace/6,
-                mtx_column_threshold/5, mtx_column_threshold/6, 
+                mtx_column_threshold/3, mtx_column_threshold/5, mtx_column_threshold/6, 
                 mtx_column_frequency_threshold/5,
                 mtx_column_include_rows/4, mtx_column_include_rows/5,         % +Mtx, +Cid, +Call, -Incl,[+Opts]
                 mtx_column_values_select/6,
