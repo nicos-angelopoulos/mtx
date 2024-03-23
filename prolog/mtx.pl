@@ -247,14 +247,21 @@ Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 % SetName
 % * mtcars
 %   from the mtcars variable in R
+% * iris
+%   from the iris variable in R
 % 
 %==
 % ?- mtx( pack(mtx/data/mtcars), Mtcars ), mtx_data(mtcars, Mtcars).
 % Mtcars = [row(mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb), row(21.0, 6.0, 160.0, 110.0, 3.9, 2.62, 16.46, 0.0, 1.0, 4.0, 4.0), row(21.0, 6.0, 160.0, 110.0, 3.9, 2.875, 17.02, 0.0, 1.0, 4.0, 4.0), row(22.8, 4.0, 108.0, 93.0, 3.85, 2.32, 18.61, 1.0, 1.0, 4.0, 1.0), row(21.4, 6.0, 258.0, 110.0, 3.08, 3.215, 19.44, 1.0, 0.0, 3.0, 1.0), row(18.7, 8.0, 360.0, 175.0, 3.15, 3.44, 17.02, 0.0, 0.0, 3.0, 2.0), row(18.1, 6.0, 225.0, 105.0, 2.76, 3.46, 20.22, 1.0, 0.0, 3.0, 1.0), row(14.3, 8.0, nle.360.0, 245.0, 3.21, 3.57, 15.84, 0.0, 0.0, 3.0, 4.0), row(..., ..., ..., ..., ..., ..., ..., ..., ..., ..., ...)|...]
 %==
 %
-mtx_data( mtcars, Mtcars ) :-
-    mtx( pack(mtx/data/mtcars), Mtcars ).
+%==
+% ?- mtx_data( iris, Mtx ).
+% Mtx = [row('Species', 'Sepal.Length', 'Sepal.Width', 'Petal.Length', 'Petal.Width'), row(setosa, 5.1, 3.5, 1.4, 0.2), row(setosa, 4.9, 3.0, 1.4, 0.2), row(setosa, 4.7, 3.2, 1.3, 0.2), row(setosa, 4.6, 3.1, 1.5, 0.2), row(setosa, 5.0, 3.6, 1.4, 0.2), row(setosa, 5.4, 3.9, 1.7, 0.4), row(setosa, 4.6, 3.4, 1.4, 0.3), row(..., ..., ..., ..., ...)|...].
+%==
+%
+mtx_data( Set, Mtx ) :-
+    mtx( pack(mtx/data/Set), Mtx ).
 
 /** mtx_sep_type(+SepType).
 
