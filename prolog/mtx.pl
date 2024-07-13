@@ -115,6 +115,7 @@
 :- lib(mtx_column_name_options/3).
 :- lib(mtx_column_name_options/5).
 :- lib(mtx_column_include_rows/4).
+:- lib(mtx_column_include_rows/5).
 :- lib(mtx_column_select/4).
 :- lib(mtx_column_threshold/3).
 :- lib(mtx_column_threshold/5).
