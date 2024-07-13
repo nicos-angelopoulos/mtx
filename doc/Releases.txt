@@ -2,6 +2,7 @@
 --------------------
 
 0.7
+     24.07.13   CHANGE: ensure each interface pred has its own file and multi arited have loads for all arities
      24.03.23   ADDED:  mtx_data(iris,Iris) and .pl file for generating it
      24.03.18   ADDED:  mtx_column_threshold/3, with options
      23.09.02   FIXED:  mtx_relative_pos/5 to module interface, doc example of /5 version

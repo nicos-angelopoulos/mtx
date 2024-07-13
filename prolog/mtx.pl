@@ -3,10 +3,12 @@
                 mtx_data/2, mtx_dims/3,
                 %
                 mtx_lists/2,
-                mtx_header/2, mtx_header_body/3,  mtx_header_body/5,
+                mtx_header/2, 
+                mtx_header_body/3,  mtx_header_body/5,
                 mtx_has_header_add/4,
                 mtx_header_column_name_pos/4, mtx_header_column_pos/3,
-                mtx_header_column_multi_pos/4, mtx_relative_pos/4, mtx_relative_pos/5,
+                mtx_header_column_multi_pos/4, 
+                mtx_relative_pos/4, mtx_relative_pos/5,
                 mtx_header_cids_order/3,
                 mtx_name_prefix_column/5,
                 mtx_column/3, mtx_column/5, mtx_column_default/4, 
@@ -14,7 +16,9 @@
                 mtx_column_name_options/5, mtx_column_name_options/3,
                 mtx_options_select/4, mtx_options_select/5,
                 mtx_column_select/4, 
-                mtx_columns/3,mtx_columns/4,mtx_column_kv/3,mtx_column_kv/4,mtx_columns_kv/6,
+                mtx_columns/3,mtx_columns/4,
+                mtx_column_kv/3, mtx_column_kv/4,
+                mtx_columns_kv/6,
                 mtx_column_add/4,
                 mtx_column_replace/5, mtx_column_replace/6,
                 mtx_column_threshold/3, mtx_column_threshold/5, mtx_column_threshold/6, 
@@ -36,7 +40,8 @@
                 mtx_row_apply/4,
                 mtx_factors/3, mtx_transpose/2,
                 mtx_prolog/2, mtx_prolog/3,             % ?Mtx, ?Pl[, +Opts]
-                mtx_sort/3, mtx_sort/4, mtx_type/2,
+                mtx_sort/3, mtx_sort/4,
+                mtx_type/2,
                 mtx_sep_type/1, mtx_sep/2,
                 mtx_bi_opts/5,
                 mtx_column_subsets/3,
@@ -79,30 +84,48 @@
 :- alias_data.
 
 :- lib(mtx/1).
+:- lib(mtx/2).
+:- lib(mtx/3).
 :- lib(mtx_column_kv/3).
+:- lib(mtx_column_kv/4).
 :- lib(mtx_header/2).
 :- lib(mtx_header_body/3).
+:- lib(mtx_header_body/5).
 :- lib(mtx_has_header_add/4).
 :- lib(mtx_header_column_name_pos/4).
 :- lib(mtx_header_column_pos/3).
 :- lib(mtx_header_column_multi_pos/4).
+:- lib(mtx_in_memory/1).
 :- lib(mtx_in_memory/2).
 :- lib(mtx_matrices_in_memory/1).
 :- lib(mtx_sort/3).
+:- lib(mtx_sort/4).
+:- lib(mtx_facts/1).
+:- lib(mtx_facts/2).
 :- lib(mtx_facts/3).
+:- lib(mtx_facts_remove/1).
 :- lib(mtx_column_add/4).
 :- lib(mtx_column/3).
+:- lib(mtx_column/5).
+:- lib(mtx_column_set/3).
+:- lib(mtx_column_set/4).
+:- lib(mtx_columns/3).
+:- lib(mtx_columns/4).
 :- lib(mtx_column_default/4).
 :- lib(mtx_column_name_options/3).
 :- lib(mtx_column_name_options/5).
 :- lib(mtx_column_include_rows/4).
 :- lib(mtx_column_select/4).
+:- lib(mtx_column_threshold/3).
 :- lib(mtx_column_threshold/5).
+:- lib(mtx_column_threshold/6).
 :- lib(mtx_column_frequency_threshold/5).
 :- lib(mtx_column_replace/5).
+:- lib(mtx_column_replace/6).
 :- lib(mtx_column_values_select/6).
 :- lib(mtx_name_prefix_column/5).
 :- lib(mtx_relative_pos/4).
+:- lib(mtx_relative_pos/5).
 :- lib(mtx_lists/2).
 :- lib(mtx_transpose/2).
 :- lib(mtx_factors/3).
@@ -111,7 +134,9 @@
 :- lib(mtx_header_cids_order/3).
 :- lib(mtx_columns_remove/3).
 :- lib(mtx_dims/3).
+:- lib(mtx_prolog/2).
 :- lib(mtx_prolog/3).
+:- lib(mtx_columns_partition/4).
 :- lib(mtx_columns_partition/5).
 :- lib(mtx_rows_partition/5).
 :- lib(mtx_columns_values/3).
@@ -120,6 +145,7 @@
 :- lib(mtx_columns_cross_table/5).
 :- lib(mtx_errors/0).
 :- lib(mtx_pos_elem/5).
+:- lib(mtx_pos_elem/6).
 :- lib(mtx_apply/4).
 :- lib(mtx_type/2).
 :- lib(mtx_read_table/4).
@@ -127,8 +153,10 @@
 :- lib(mtx_row_apply/4).
 :- lib(mtx_bi_opts/5).
 :- lib(mtx_column_subsets/3).
+:- lib(mtx_read_stream/3).
 :- lib(mtx_read_stream/4).
 :- lib(mtx_column_join/5).
+:- lib(mtx_options_select/4).
 :- lib(mtx_options_select/5).
 :- lib(mtx_print/2).
 
@@ -229,6 +257,7 @@ Good starting points are the documentation for mtx/1, mtx/2 and mtx/3.
 @version  0.5 2020/3/17, work-around SWI broken back-compatibility (std aliases)
 @version  0.4 2019/4/22
 @version  0.3 2019/4/18
+@version  0.2 2018/6/5
 @version  0.1 2018/4/2    first public version
 @tbd add more debug(mtx(Pred)) messages (see src/mtx.pl for a start on this)
 @see web-page: http://stoics.org.uk/~nicos/sware/mtx
@@ -308,27 +337,3 @@ mtx_sep_known( tab,   0'\t ).
 mtx_sep_known( '\t',  0'\t ).
 mtx_sep_known( comma, 0',  ).
 mtx_sep_known( space, 0'   ).
-
-/** mtx_version( -Version, -Date ).
-
-Current version and release date for pack =mtx=.
-
-The pack is distributed under the MIT license.
-
-==
-?- mtx_version( Ver, Date ).
-Ver = 0:6:0,
-Date = date(2021, 6, 17).
-==
-
-@author nicos angelopoulos
-@version  0.6 2021/6/17
-@license MIT
-
-*/
-% mtx_version( 0:1:0, date(2018,4,2) ).
-% mtx_version( 0:2:0, date(2018,6,5) ).
-% mtx_version( 0:3:0, date(2019,4,18) ).
-% mtx_version( 0:4:0, date(2019,4,22) ).
-% mtx_version( 0:5:0, date(2020,3,18) ).
-mtx_version( 0:6:0, date(2021,6,17) ).% option:row_call()
