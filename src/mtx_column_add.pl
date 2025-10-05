@@ -23,6 +23,9 @@
 %  N is taken to be relative to each input and can be an expression except if 
 %  of the form abs_pos(Abs) (see mtx_relative_pos/5).
 % 
+% As of v0.3 N can be a variable, in which Values should be a list of column values (plus header value as first item).
+% This is a shorthand 
+% 
 %==
 % ?- Mtx = [row(a, b, d), row(1, 2, 4), row(5, 6, 8)], assert( an_mtx(Mtx) ).
 %
@@ -60,33 +63,38 @@
 % 
 %==
 %
-% To add at the end of the matrix, use
+% As of version v0.3 can use variable N for adding at end of matrix.
+%==
+% ?- an_mtx(Mtx), mtx_column_add( Mtx, After, [e,5,10], Ntx ).
+% After = 4,
+% Ntx = [row(a, b, d, e), row(1, 2, 4, 5), row(5, 6, 8, 10)].
+%==
+% 
+% To add at the end of the matrix in general, use
 %==
 % ?- an_mtx(Mtx), mtx_header_body(Mtx, Header, Rows), Clm = [e,5,10],
 %    mtx_relative_pos( -1, 0, Header, 1, After ), mtx_column_add( [Header|Rows], After, Clm, Ntx ).
 %
+% Ntx = [row(a, b, d, e), row(1, 2, 4, 5), row(5, 6, 8, 10)].
 %==
 %
 % @author nicos angelopoulos
 % @version  0.1 2014/6/5  added comments. 
 % @version  0.2 2014/6/16 added transform(K,G,H) terms as 3rd argument
+% @version  0.3 2025/10/5 var(N) as shorthand for adding at end of matrix
 % @tbd      complete the documentation
 %
-mtx_column_add( MtxF, Nid, VTerm, Out ) :-
-	mtx( MtxF, Mtx ),
-	Mtx = [Hdr|Rows],
-	% findall( K-Values, mtx_column_add_vterm_values(VTerm,Rows,Hdr,K,Values), KVs ),
-	findall( N-Values, ( mtx_column_add_vterm_values(VTerm,Rows,Hdr,K,Values),
-					 % R is K + Nid,
-
-	                     mtx_relative_pos(Nid,K,Hdr,+1,N)% ,mtx_header_column_pos(Hdr,R,N)
-	                   ), NVs ),
-	% findall( K, member(K-_,KVs), Ks ),
-	% maplist( mtx_relative_pos(N), Ks, Nids ),
-	% mtx_column_add_vterm_values( VTerm, Rows, Hdr, Values ),
-	% mtx_header_column_pos( Hdr, Nid, N ),
-	% maplist( mtx_header_column_pos( Hdr, Nids, Ns ),
-	% Ni is N - 1,
+mtx_column_add( Mtx, Nid, VTerm, Out ) :-
+     mtx_header_body( Mtx, Hdr, Rows ),
+     ( var(Nid) -> 
+                    mtx_relative_pos( -1, 0, Hdr, 1, Nid ),
+                    NVs = [Nid-VTerm]
+                 ; 
+	               findall( N-Values, ( mtx_column_add_vterm_values(VTerm,Rows,Hdr,K,Values),
+	     				 % R is K + Nid,
+	                         mtx_relative_pos(Nid,K,Hdr,+1,N)% ,mtx_header_column_pos(Hdr,R,N)
+	                    ), NVs )
+     ),
 	mtx_rows_column_pairs_add( NVs, Mtx, Extended ),
 	mtx( Out, Extended ).
 
