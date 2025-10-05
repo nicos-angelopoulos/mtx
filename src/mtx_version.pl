@@ -6,13 +6,13 @@ The pack is distributed under the MIT license.
 
 ==
 ?- mtx_version( Ver, Date ).
-Ver = 0:6:0,
-Date = date(2021, 6, 17).
+Ver = 0:7:0,
+Date = date(2025, 10, 5).
 ==
 
 @author nicos angelopoulos
-@version  0.6 2021/6/17
+@version  0.7 2025/10/5
 @license MIT
 
 */
-mtx_version( 0:6:0, date(2021,6,17) ).
+mtx_version( 0:7:0, date(2025,10,5) ).

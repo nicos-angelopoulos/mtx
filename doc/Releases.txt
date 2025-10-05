@@ -1,8 +1,8 @@
 ---   Releases   ---
 --------------------
 
-0.7
-     25.10.05   DOC:    add examples of how to access position off the edge for mtx_relative_pos/5
+0.7          @ 25.10.05
+     25.10.05   DOC:    added examples of how to access position off the edge for mtx_relative_pos/5
                 IFACE:  mtx_column_add/4 now accepts variable 2nd arg for adding off the edge of the matrix
      24.07.29   CHANGE: improve doc in mtx_column_threshold/3,5,6 and add option rej() in /3 version
      24.07.13   CHANGE: ensure each interface pred has its own file and multi arited have loads for all arities
@@ -16,7 +16,7 @@
      22.02.06   ERROR:  throw errors if cannot decipher +/- modality
                 ERROR:  update some of the throws to pack_errors throw/2
 
-0.6         @  21.06.17
+0.6          @ 21.06.17
      21.06.17   OPTS:   row_call(RowC)
      20.09.05   DEPS:   explicit load of library(apply)
      20.08.18   DEPS:   explicit load of library(filesex)
@@ -24,7 +24,7 @@
      20.08.17   DEPS:   explicit load of library(lists)
      20.03.18   EG:     debug matrices in memory.
 
-0.5          @  20.03.18 
+0.5          @ 20.03.18 
      20.03.17   DOC:    doc comments were still on csv_transpose/2
                 DOC:    remove spurious Opts from doc of mtx_columns_remove/3
                 DOC:    mtx_facts/2 fixed formating
