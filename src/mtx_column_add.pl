@@ -60,6 +60,13 @@
 % 
 %==
 %
+% To add at the end of the matrix, use
+%==
+% ?- an_mtx(Mtx), mtx_header_body(Mtx, Header, Rows), Clm = [e,5,10],
+%    mtx_relative_pos( -1, 0, Header, 1, After ), mtx_column_add( [Header|Rows], After, Clm, Ntx ).
+%
+%==
+%
 % @author nicos angelopoulos
 % @version  0.1 2014/6/5  added comments. 
 % @version  0.2 2014/6/16 added transform(K,G,H) terms as 3rd argument

@@ -2,6 +2,7 @@
 --------------------
 
 0.7
+     25.10.05   DOC:    add examples of how to access position off the edge for mtx_relative_pos/5
      24.07.29   CHANGE: improve doc in mtx_column_threshold/3,5,6 and add option rej() in /3 version
      24.07.13   CHANGE: ensure each interface pred has its own file and multi arited have loads for all arities
      24.03.23   ADDED:  mtx_data(iris,Iris) and .pl file for generating it

@@ -28,6 +28,17 @@
 % ?- mtx_relative_pos( -2, 0, c(a,b,c), 1, Pos ).
 % Pos = 3.
 %==
+%
+% To identify the first column position after the edge, use:
+%==
+% ?- mtx_relative_pos( -1, 0, c(a,b,c), 1, Pos ).
+% Pos = 4.
+% 
+% ?- mtx_relative_pos( -1, 0, c(a,b,c,d), 1, Pos ).
+% Pos = 5.
+%
+%==
+% 
 % @version  0.1 2014/9/22
 %
 mtx_relative_pos( N, K, Hdr, Pos ) :-
